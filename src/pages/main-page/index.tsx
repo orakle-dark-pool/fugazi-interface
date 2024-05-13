@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useCounter } from "../../contract/fh-erc.ts";
+import Loading from "../../components/loading.tsx";
 
 const MainPage = () => {
   //const { isItFhenixNetwork, balance, address, fnxConnect } = useChain();
@@ -68,6 +69,7 @@ const MainPage = () => {
 
   return (
     <Wrapper>
+      {isPending && <Loading />}
       <Header />
 
       <StyledDiv>Is Pending: {isPending.toString()}</StyledDiv>
