@@ -34,8 +34,9 @@ export const Header = () => {
 
   return (
     <Wrapper>
-      <Title>FuGazi</Title>
+      <Title onClick={() => navigate("/")}>FuGazi</Title>
       <NavItem onClick={() => navigate("/swap")}>Swap</NavItem>
+      <NavItem onClick={() => navigate("/claim")}>Claim</NavItem>
 
       {!isConnected ? (
         <ConnectButton
@@ -70,12 +71,13 @@ const Wrapper = tw.div`
 `;
 
 const Title = tw.h1`
-  text-2xl font-semibold text-white
+  text-2xl font-semibold text-white cursor-pointer
 `;
 
 const NavItem = tw.div`
   text-white font-semibold bg-none
   border-none cursor-pointer
+  hover:bg-green-200 px-16 py-8 rounded-md
 `;
 
 const ConnectButton = tw.button`
