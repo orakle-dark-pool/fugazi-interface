@@ -2,7 +2,7 @@ import { useWriteContract } from "wagmi";
 import { COUNTER_ABI } from "../abi/counter";
 import { Permit, EncryptedUint32 } from "fhenixjs";
 import { readContract } from "@wagmi/core";
-import { config } from "../main";
+import { config } from "../configs/fhenix-config";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
 

@@ -4,7 +4,8 @@ import { formatEther } from "viem";
 import { switchChain } from "@wagmi/core";
 import { useConnect, useAccount, useDisconnect, useBalance } from "wagmi";
 import { injected } from "wagmi/connectors";
-import { config } from "../main";
+import { config } from "../configs/fhenix-config";
+import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const { connect } = useConnect();
@@ -12,6 +13,7 @@ export const Header = () => {
   const { disconnect } = useDisconnect();
   const { data: balance } = useBalance({ address });
   const [isItFhenixNetwork, setIsItFhenixNetwork] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkChain = async () => {
@@ -33,6 +35,8 @@ export const Header = () => {
   return (
     <Wrapper>
       <Title>FuGazi</Title>
+      <NavItem onClick={() => navigate("/swap")}>Swap</NavItem>
+
       {!isConnected ? (
         <ConnectButton
           onClick={() =>
@@ -67,6 +71,11 @@ const Wrapper = tw.div`
 
 const Title = tw.h1`
   text-2xl font-semibold text-white
+`;
+
+const NavItem = tw.div`
+  text-white font-semibold bg-none
+  border-none cursor-pointer
 `;
 
 const ConnectButton = tw.button`
