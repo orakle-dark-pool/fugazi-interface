@@ -70,30 +70,20 @@ const MainPage = () => {
     <Wrapper>
       <Header />
 
-      <StyledDiv>
-        Todo1: Swap - Amm 토큰 / 수량 입력 <br />
-        입력값 확인 <br />
-        암호화
-        <br />
-        컨트랙트 호출
-        <br />
-        결과 확인 <br />
-      </StyledDiv>
-      <StyledDiv>Todo2: Pool</StyledDiv>
-      <StyledDiv>Todo3: Farm</StyledDiv>
-
       <StyledDiv>Is Pending: {isPending.toString()}</StyledDiv>
       {/* <StyledDiv>Hash: {hash ? hash : "Loading..."}</StyledDiv> */}
-      <button onClick={getPermitfromWallet}>Get Permit</button>
-      <button onClick={() => getCounter()}>Get Counter</button>
-      <button onClick={() => getCounterPermission()}>
+      <StyledButton onClick={getPermitfromWallet}>Get Permit</StyledButton>
+      <StyledButton onClick={() => getCounter()}>Get Counter</StyledButton>
+      <StyledButton onClick={() => getCounterPermission()}>
         Get Counter Permission
-      </button>
+      </StyledButton>
       {/* <button onClick={() => getCounterPermissionSealed()}>
         Get Counter Permission Sealed
       </button> */}
-      <button onClick={() => addCounter()}>Add Counter</button>
-      <button onClick={() => addCounterByWagmi()}>Add Counter By Wagmi</button>
+      <StyledButton onClick={() => addCounter()}>Add Counter</StyledButton>
+      <StyledButton onClick={() => addCounterByWagmi()}>
+        Add Counter By Wagmi
+      </StyledButton>
     </Wrapper>
   );
 };
@@ -120,4 +110,11 @@ const Wrapper = tw.div`
 
 const StyledDiv = tw.div`
   text-lg p-32
+`;
+
+const StyledButton = tw.button`
+  w-200
+  bg-green-300 hover:bg-green-100 text-white font-semibold h-36
+  px-16 py-2 rounded-md 
+  border-solid border-2 border-green-200
 `;
