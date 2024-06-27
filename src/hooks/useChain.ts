@@ -19,9 +19,9 @@ export const useChain = () => {
   const [isItFhenixNetwork, setIsItFhenixNetwork] = useState<boolean>(false);
   const [eventWasAdded, setEventWasAdded] = useState<boolean>(false);
 
-  const fnxChainId = "42069";
-  const networkRPC = "https://api.testnet.fhenix.zone:7747";
-  const explorerURL = "https://explorer.testnet.fhenix.zone";
+  const fnxChainId = "8008135";
+  const networkRPC = "https://api.helium.fhenix.zone";
+  const explorerURL = "https://explorer.helium.fhenix.zone";
   const ERROR_CHAIN_DOES_NOT_EXIST = "4902";
 
   const initFHEClient = async () => {
@@ -63,8 +63,8 @@ export const useChain = () => {
         const chainData = [
           {
             chainId: "0x" + Number(fnxChainId).toString(16),
-            chainName: "Fhenix Network",
-            nativeCurrency: { name: "FHE Token", symbol: "FHE", decimals: 18 },
+            chainName: "Fhenix Helium",
+            nativeCurrency: { name: "FHE Token", symbol: "tFHE", decimals: 18 },
             rpcUrls: [networkRPC],
             blockExplorerUrls: [explorerURL],
           },

@@ -18,10 +18,37 @@ export const fhenix = {
   },
 };
 
+export const newTestFhenix = {
+  id: 8008135,
+  name: "Fhenix Helium",
+  nativeCurrency: {
+    name: "FHE Token",
+    symbol: "tFHE",
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: { http: ["https://api.helium.fhenix.zone"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Fhenix Explorer",
+      url: "https://explorer.helium.fhenix.zone",
+    },
+  },
+};
+
 export const config = createConfig({
   chains: [fhenix],
   connectors: [injected()],
   transports: {
     [fhenix.id]: http(),
+  },
+});
+
+export const newTestFhenixConfig = createConfig({
+  chains: [newTestFhenix],
+  connectors: [injected()],
+  transports: {
+    [newTestFhenix.id]: http(),
   },
 });

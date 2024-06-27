@@ -10,26 +10,24 @@ import {
 } from "fhenixjs";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-
-import { useCounter } from "../../contract/fh-erc.ts";
 import Loading from "../../components/loading.tsx";
+import { useFhErc20 } from "../../contract/fh-erc20.ts";
 
 const MainPage = () => {
   //const { isItFhenixNetwork, balance, address, fnxConnect } = useChain();
 
   const [encrypted, setEncrypted] = useState<any | undefined>(undefined);
   const [permit, setPermit] = useState<Permit | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
   const { address, isConnected } = useAccount();
   const provider = new BrowserProvider(window.ethereum);
   const client = new FhenixClient({ provider });
 
-  const {
-    isPending,
-    getCounterPermission,
-    getCounter,
-    addCounter,
-    addCounterByWagmi,
-  } = useCounter({ permit, encrypted });
+  const { isPending, getMintEncrypted, getBalanceOfEncrypted } = useFhErc20({
+    permit,
+    encrypted,
+    walletAddress: address,
+  });
 
   useEffect(() => {
     if (isConnected) {
@@ -49,42 +47,61 @@ const MainPage = () => {
     encrypt();
   }, []);
 
+  const decryptBalance = async () => {
+    const contractAddress = "0x100371Fe4B99492a6AEE453FFa46AB8074aae8e4";
+    const balance = await getBalanceOfEncrypted();
+
+    // Ensure the client has the necessary permit for the contract address
+    let permit = client.getPermit(contractAddress);
+    if (!permit) {
+      // Fetch or initialize the permit here
+      permit = await client.generatePermit(contractAddress, provider);
+      client.storePermit(permit);
+    }
+
+    const decrypted = client.unseal(contractAddress, balance);
+    console.log("Decrypted", decrypted.toString());
+  };
+
   const getPermitfromWallet = async () => {
-    const contractAddress = "0x7B03c89642a9286Dcae52caB419D4ce46Cc39583";
+    setIsLoading(true);
+    const contractAddress = "0x100371Fe4B99492a6AEE453FFa46AB8074aae8e4";
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     const fhenixClient = new FhenixClient({ provider });
 
-    console.log(`loading permit for ${contractAddress}`);
+    console.log(`loaded permit for ${contractAddress}`);
     let permit = await getPermit(contractAddress, provider);
+    fhenixClient.storePermit(permit);
     if (!permit) {
       let permit = await fhenixClient.generatePermit(
         contractAddress,
         undefined,
         signer
       );
+      fhenixClient.storePermit(permit);
     }
+    setIsLoading(false);
     setPermit(permit);
   };
 
   return (
     <Wrapper>
-      {isPending && <Loading />}
+      {isPending || (isLoading && <Loading />)}
       <Header />
 
       <StyledDiv>Is Pending: {isPending.toString()}</StyledDiv>
       {/* <StyledDiv>Hash: {hash ? hash : "Loading..."}</StyledDiv> */}
       <StyledButton onClick={getPermitfromWallet}>Get Permit</StyledButton>
-      <StyledButton onClick={() => getCounter()}>Get Counter</StyledButton>
-      <StyledButton onClick={() => getCounterPermission()}>
-        Get Counter Permission
+
+      <StyledButton onClick={() => getMintEncrypted()}>
+        Mint Encrypted
       </StyledButton>
-      {/* <button onClick={() => getCounterPermissionSealed()}>
-        Get Counter Permission Sealed
-      </button> */}
-      <StyledButton onClick={() => addCounter()}>Add Counter</StyledButton>
-      <StyledButton onClick={() => addCounterByWagmi()}>
-        Add Counter By Wagmi
+      <StyledButton onClick={() => getBalanceOfEncrypted()}>
+        Get Balance Of Encrypted
+      </StyledButton>
+      <StyledButton onClick={() => decryptBalance()}>
+        decrypt Balance
       </StyledButton>
     </Wrapper>
   );

@@ -2,16 +2,16 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { fhenix } from "./configs/fhenix-config.ts";
+import { newTestFhenix } from "./configs/fhenix-config.ts";
 
 const MainPage = lazy(() => import("./pages/main-page"));
 const SwapPage = lazy(() => import("./pages/swap-page"));
 const ClaimPage = lazy(() => import("./pages/claim-page"));
 
 export const config = createConfig({
-  chains: [fhenix],
+  chains: [newTestFhenix],
   transports: {
-    [fhenix.id]: http(),
+    [newTestFhenix.id]: http(),
   },
 });
 const queryClient = new QueryClient();

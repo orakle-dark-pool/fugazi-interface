@@ -4,7 +4,7 @@ import { formatEther } from "viem";
 import { switchChain } from "@wagmi/core";
 import { useConnect, useAccount, useDisconnect, useBalance } from "wagmi";
 import { injected } from "wagmi/connectors";
-import { config } from "../configs/fhenix-config";
+import { newTestFhenixConfig } from "../configs/fhenix-config";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
@@ -21,8 +21,10 @@ export const Header = () => {
         console.log("Connected");
       }
       try {
-        const isFhenix = await switchChain(config, { chainId: 42069 });
-
+        //const isFhenix = await switchChain(config, { chainId: 42069 });
+        const isFhenix = await switchChain(newTestFhenixConfig, {
+          chainId: 8008135,
+        });
         setIsItFhenixNetwork(isFhenix);
       } catch (error) {
         console.error("Chain switching failed", error);
