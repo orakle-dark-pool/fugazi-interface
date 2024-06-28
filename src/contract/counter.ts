@@ -1,6 +1,6 @@
 import { useWriteContract } from "wagmi";
 import { COUNTER_ABI } from "../abi/counter";
-import { Permit, EncryptedUint32 } from "fhenixjs";
+import { Permit, EncryptedUint32, getPermit, FhenixClient } from "fhenixjs";
 import { readContract } from "@wagmi/core";
 import { config } from "../configs/fhenix-config";
 import { BrowserProvider, ethers } from "ethers";
@@ -12,7 +12,7 @@ interface counterProps {
 }
 
 export const useCounter = ({ permit, encrypted }: counterProps) => {
-  const address = "0x7B03c89642a9286Dcae52caB419D4ce46Cc39583";
+  const address = "0xc5205B400619E87939617096A8385331076C397c";
   const [isPending, setIsPending] = useState(false);
   const { writeContract } = useWriteContract();
 
@@ -61,27 +61,46 @@ export const useCounter = ({ permit, encrypted }: counterProps) => {
     });
   };
 
+  // const getCounterPermission = async () => {
+  //   return executeContractCall(async () => {
+  //     const { signer } = await getProviderAndSigner();
+  //     const contract = new ethers.Contract(address, COUNTER_ABI, signer);
+  //     const counterPermission = await contract.getCounterPermit(permit);
+  //     console.log("Counter Permission", counterPermission);
+  //     return counterPermission;
+  //   });
+  // };
   const getCounterPermission = async () => {
-    return executeContractCall(async () => {
-      const { signer } = await getProviderAndSigner();
-      const contract = new ethers.Contract(address, COUNTER_ABI, signer);
-      const counterPermission = await contract.getCounterPermit(permit);
-      console.log("Counter Permission", counterPermission);
-      return counterPermission;
-    });
+    const provider = new BrowserProvider(window.ethereum);
+    const client = new FhenixClient({ provider });
+    let permit = await getPermit(address, provider);
+    client.storePermit(permit);
+    console.log("Permit", permit);
   };
 
   const getCounter = async () => {
-    return executeContractCall(async () => {
-      const counterResult = await readContract(config, {
-        abi: COUNTER_ABI,
-        address,
-        functionName: "getCounter",
-      });
-      console.log("Counter", counterResult);
-      return counterResult;
-    });
+    const { signer } = await getProviderAndSigner();
+    const provider = new BrowserProvider(window.ethereum);
+    const client = new FhenixClient({ provider });
+    const contract = new ethers.Contract(address, COUNTER_ABI, signer);
+    const counterResult = await contract.getCounter();
+    console.log("Counter", counterResult);
+    const unsealed = await client.unseal(address, counterResult.toString());
+    console.log("Unsealed", unsealed);
+    return counterResult;
   };
+
+  // const getCounter = async () => {
+  //   return executeContractCall(async () => {
+  //     const counterResult = await readContract(config, {
+  //       abi: COUNTER_ABI,
+  //       address,
+  //       functionName: "getCounter",
+  //     });
+  //     console.log("Counter", counterResult);
+  //     return counterResult;
+  //   });
+  // };
 
   return {
     isPending,

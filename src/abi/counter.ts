@@ -193,9 +193,9 @@ export const COUNTER_ABI = [
     name: "getCounterPermitSealed",
     outputs: [
       {
-        internalType: "bytes",
+        internalType: "string",
         name: "",
-        type: "bytes",
+        type: "string",
       },
     ],
     stateMutability: "view",

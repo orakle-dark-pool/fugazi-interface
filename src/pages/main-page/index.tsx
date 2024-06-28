@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import Loading from "../../components/loading.tsx";
 import { useFhErc20 } from "../../contract/fh-erc20.ts";
+import { useCounter } from "../../contract/counter.ts";
 
 const MainPage = () => {
   //const { isItFhenixNetwork, balance, address, fnxConnect } = useChain();
@@ -30,23 +31,33 @@ const MainPage = () => {
     walletAddress: address,
   });
 
-  // useEffect(() => {
-  //   if (isConnected) {
-  //     console.log("Connected");
-  //   }
-  //   // const encrypt = async () => {
-  //   //   const result: EncryptedUint32 = await client.encrypt(
-  //   //     1,
-  //   //     EncryptionTypes.uint32
-  //   //   );
-  //     // const decoder = new TextDecoder("utf-8");
-  //     // const decrypted = decoder.decode(result.data);
-  //     // setEncrypted(decrypted);
-  //     // console.log("Encrypted", result);
-  //     // setEncrypted(result);
-  //   };
-  //   encrypt();
-  // }, []);
+  const {
+    isPending: isPendingCounter,
+    addCounter,
+    getCounter,
+    getCounterPermission,
+  } = useCounter({
+    permit,
+    encrypted,
+  });
+
+  useEffect(() => {
+    if (isConnected) {
+      console.log("Connected");
+    }
+    const encrypt = async () => {
+      const result: EncryptedUint32 = await client.encrypt(
+        1,
+        EncryptionTypes.uint32
+      );
+      const decoder = new TextDecoder("utf-8");
+      const decrypted = decoder.decode(result.data);
+      setEncrypted(decrypted);
+      console.log("Encrypted", result);
+      setEncrypted(result);
+    };
+    encrypt();
+  }, []);
 
   const handleGetEncryptedBalance = async () => {
     console.log("Getting encrypted balance");
@@ -66,6 +77,16 @@ const MainPage = () => {
     } catch (error) {
       console.error("Error during decryption", error);
     }
+  };
+
+  const handleAddCounter = async () => {
+    const result = await addCounter();
+    console.log("Result", result);
+  };
+
+  const handleGetCounter = async () => {
+    const result = await getCounter();
+    console.log("Result", result);
   };
 
   const getPermitfromWallet = async () => {
@@ -89,15 +110,24 @@ const MainPage = () => {
     setPermit(permit);
   };
 
+  const handleGetCounterPermission = async () => {
+    setIsLoading(true);
+    const result = await getCounterPermission();
+    console.log("Result", result);
+    setIsLoading(false);
+  };
+
   return (
     <Wrapper>
-      {isPending || (isLoading && <Loading />)}
+      {isPending || isPendingCounter || (isLoading && <Loading />)}
       <Header />
 
       <StyledDiv>Is Pending: {isPending.toString()}</StyledDiv>
       {/* <StyledDiv>Hash: {hash ? hash : "Loading..."}</StyledDiv> */}
       <StyledButton onClick={getPermitfromWallet}>Get Permit</StyledButton>
-
+      <StyledButton onClick={handleGetCounterPermission}>
+        Get Counter Permission
+      </StyledButton>
       <StyledButton onClick={() => getMintEncrypted()}>
         Mint Encrypted
       </StyledButton>
@@ -107,6 +137,8 @@ const MainPage = () => {
       <StyledButton onClick={handleDecryptBalance}>
         decrypt Balance
       </StyledButton>
+      <StyledButton onClick={handleAddCounter}>Add Counter</StyledButton>
+      <StyledButton onClick={handleGetCounter}>Get Counter</StyledButton>
     </Wrapper>
   );
 };
