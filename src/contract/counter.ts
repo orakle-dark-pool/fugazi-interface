@@ -1,7 +1,12 @@
 import { useWriteContract } from "wagmi";
 import { COUNTER_ABI } from "../abi/counter";
-import { Permit, EncryptedUint32, getPermit, FhenixClient } from "fhenixjs";
-import { readContract } from "@wagmi/core";
+import {
+  Permit,
+  EncryptedUint32,
+  getPermit,
+  FhenixClient,
+  generatePermit,
+} from "fhenixjs";
 import { config } from "../configs/fhenix-config";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
@@ -71,6 +76,7 @@ export const useCounter = ({ permit, encrypted }: counterProps) => {
   //   });
   // };
   const getCounterPermission = async () => {
+    const { signer } = await getProviderAndSigner();
     const provider = new BrowserProvider(window.ethereum);
     const client = new FhenixClient({ provider });
     let permit = await getPermit(address, provider);
@@ -83,11 +89,21 @@ export const useCounter = ({ permit, encrypted }: counterProps) => {
     const provider = new BrowserProvider(window.ethereum);
     const client = new FhenixClient({ provider });
     const contract = new ethers.Contract(address, COUNTER_ABI, signer);
-    const counterResult = await contract.getCounter();
-    console.log("Counter", counterResult);
-    const unsealed = await client.unseal(address, counterResult.toString());
-    console.log("Unsealed", unsealed);
-    return counterResult;
+
+    //const permit = await getPermit(address, provider);
+    const permit = await generatePermit(address, provider, signer);
+    console.log("Permit", permit);
+    //const permission = client.extractPermitPermission(permit);
+    try {
+      const counterResult = await contract.getCounterPermitSealed(permit);
+      console.log("Counter", counterResult);
+      const unsealed = await client.unseal(address, counterResult);
+      console.log("Unsealed", unsealed);
+      return counterResult;
+    } catch (error) {
+      console.error("Error during contract interaction", error);
+      throw error;
+    }
   };
 
   // const getCounter = async () => {
