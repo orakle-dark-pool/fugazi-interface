@@ -1,5 +1,5 @@
 import tw from "twin.macro";
-import { BrowserProvider, ethers } from "ethers";
+import { BrowserProvider, ethers, JsonRpcProvider } from "ethers";
 import { Header } from "../../components/header";
 import {
   EncryptedUint32,
@@ -21,9 +21,7 @@ const MainPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { address, isConnected } = useAccount();
   //const provider = new BrowserProvider(window.ethereum);
-  const provider = new ethers.JsonRpcProvider(
-    "https://api.helium.fhenix.zone/"
-  );
+  const provider = new JsonRpcProvider("https://api.helium.fhenix.zone/");
   const client = new FhenixClient({ provider });
 
   const { isPending, getMintEncrypted, getBalanceOfEncrypted } = useFhErc20({
@@ -73,21 +71,20 @@ const MainPage = () => {
   const getPermitfromWallet = async () => {
     setIsLoading(true);
     const contractAddress = "0x100371Fe4B99492a6AEE453FFa46AB8074aae8e4";
-    const provider = new BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
-    const fhenixClient = new FhenixClient({ provider });
-
+    //const signer = await provider.getSigner();
     console.log(`loaded permit for ${contractAddress}`);
+    const provider = new BrowserProvider(window.ethereum);
     let permit = await getPermit(contractAddress, provider);
-    fhenixClient.storePermit(permit);
-    if (!permit) {
-      let permit = await fhenixClient.generatePermit(
-        contractAddress,
-        undefined,
-        signer
-      );
-      fhenixClient.storePermit(permit);
-    }
+    client.storePermit(permit);
+    console.log(permit);
+    // if (!permit) {
+    //   let permit = await client.generatePermit(
+    //     contractAddress,
+    //     undefined,
+    //     signer
+    //   );
+    //   client.storePermit(permit);
+    // }
     setIsLoading(false);
     setPermit(permit);
   };
