@@ -60,10 +60,13 @@ export const useFhErc20 = ({
   const getBalanceOfEncrypted = async () => {
     const { provider, signer } = await getProviderAndSigner();
     const contract = new ethers.Contract(address, FHERC20_ABI, signer);
-    const permission = client.extractPermitPermission(permit);
+    //const permission = client.extractPermitPermission(permit);
 
     try {
-      const encryptedBalance = await contract.balanceOf(permit);
+      const encryptedBalance = await contract.balanceOfEncrypted(
+        walletAddress,
+        permit
+      );
 
       console.log(encryptedBalance);
 
