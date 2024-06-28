@@ -1,5 +1,5 @@
 import { FHERC20_ABI } from "../abi/fherc20";
-import { Permit, EncryptedUint32 } from "fhenixjs";
+import { Permit, EncryptedUint32, FhenixClient } from "fhenixjs";
 import { config } from "../configs/fhenix-config";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
@@ -16,6 +16,10 @@ export const useFhErc20 = ({
   walletAddress,
 }: fhErc20Props) => {
   const address = "0x100371Fe4B99492a6AEE453FFa46AB8074aae8e4";
+  const provider = new ethers.JsonRpcProvider(
+    "https://api.helium.fhenix.zone/"
+  );
+  const client = new FhenixClient({ provider });
   const [isPending, setIsPending] = useState(false);
 
   const getProviderAndSigner = async () => {
@@ -56,12 +60,15 @@ export const useFhErc20 = ({
   const getBalanceOfEncrypted = async () => {
     const { provider, signer } = await getProviderAndSigner();
     const contract = new ethers.Contract(address, FHERC20_ABI, signer);
+
     try {
       const encryptedBalance = await contract.balanceOfEncrypted(
         walletAddress,
         permit
       );
+
       console.log(encryptedBalance);
+
       return encryptedBalance;
     } catch (error) {
       throw error;

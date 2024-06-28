@@ -1,5 +1,5 @@
 import tw from "twin.macro";
-import { BrowserProvider } from "ethers";
+import { BrowserProvider, ethers } from "ethers";
 import { Header } from "../../components/header";
 import {
   EncryptedUint32,
@@ -20,7 +20,10 @@ const MainPage = () => {
   const [permit, setPermit] = useState<Permit | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const { address, isConnected } = useAccount();
-  const provider = new BrowserProvider(window.ethereum);
+  //const provider = new BrowserProvider(window.ethereum);
+  const provider = new ethers.JsonRpcProvider(
+    "https://api.helium.fhenix.zone/"
+  );
   const client = new FhenixClient({ provider });
 
   const { isPending, getMintEncrypted, getBalanceOfEncrypted } = useFhErc20({
@@ -29,38 +32,42 @@ const MainPage = () => {
     walletAddress: address,
   });
 
-  useEffect(() => {
-    if (isConnected) {
-      console.log("Connected");
-    }
-    const encrypt = async () => {
-      const result: EncryptedUint32 = await client.encrypt(
-        1,
-        EncryptionTypes.uint32
-      );
-      // const decoder = new TextDecoder("utf-8");
-      // const decrypted = decoder.decode(result.data);
-      // setEncrypted(decrypted);
-      console.log("Encrypted", result);
-      setEncrypted(result);
-    };
-    encrypt();
-  }, []);
+  // useEffect(() => {
+  //   if (isConnected) {
+  //     console.log("Connected");
+  //   }
+  //   // const encrypt = async () => {
+  //   //   const result: EncryptedUint32 = await client.encrypt(
+  //   //     1,
+  //   //     EncryptionTypes.uint32
+  //   //   );
+  //     // const decoder = new TextDecoder("utf-8");
+  //     // const decrypted = decoder.decode(result.data);
+  //     // setEncrypted(decrypted);
+  //     // console.log("Encrypted", result);
+  //     // setEncrypted(result);
+  //   };
+  //   encrypt();
+  // }, []);
 
-  const decryptBalance = async () => {
-    const contractAddress = "0x100371Fe4B99492a6AEE453FFa46AB8074aae8e4";
+  const handleGetEncryptedBalance = async () => {
+    console.log("Getting encrypted balance");
     const balance = await getBalanceOfEncrypted();
+    setEncrypted(balance);
+    console.log("encrypted", balance);
+  };
 
-    // Ensure the client has the necessary permit for the contract address
-    let permit = client.getPermit(contractAddress);
-    if (!permit) {
-      // Fetch or initialize the permit here
-      permit = await client.generatePermit(contractAddress, provider);
-      client.storePermit(permit);
+  const handleDecryptBalance = async () => {
+    if (!encrypted) {
+      console.error("Encrypted data is not available");
+      return;
     }
-
-    const decrypted = client.unseal(contractAddress, balance);
-    console.log("Decrypted", decrypted.toString());
+    try {
+      const plaintext = await client.unseal(address, encrypted);
+      console.log("Decrypted", plaintext.toString());
+    } catch (error) {
+      console.error("Error during decryption", error);
+    }
   };
 
   const getPermitfromWallet = async () => {
@@ -97,10 +104,10 @@ const MainPage = () => {
       <StyledButton onClick={() => getMintEncrypted()}>
         Mint Encrypted
       </StyledButton>
-      <StyledButton onClick={() => getBalanceOfEncrypted()}>
+      <StyledButton onClick={() => handleGetEncryptedBalance()}>
         Get Balance Of Encrypted
       </StyledButton>
-      <StyledButton onClick={() => decryptBalance()}>
+      <StyledButton onClick={handleDecryptBalance}>
         decrypt Balance
       </StyledButton>
     </Wrapper>

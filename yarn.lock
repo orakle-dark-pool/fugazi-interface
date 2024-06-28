@@ -3547,14 +3547,14 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
-fhenixjs@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/fhenixjs/-/fhenixjs-0.1.1.tgz#d6614adeff7fb8f41deb34493e7d104fb9aaabea"
-  integrity sha512-XHGFuDk2gYvgwtFTO6O63hlQcEu00jg938p5QwQiiP+wU9LRuPclrgIe9EYWVt22/dkVhUeLYYSXRwVINifqiQ==
+fhenixjs@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/fhenixjs/-/fhenixjs-0.2.1.tgz#1ef1ca5bbda6182fa4e38376cb8ad3151dc20457"
+  integrity sha512-OJmZrLCouotywnn6HbNeSvPYGZ3awQ4QgRcb8lAoJjpUixscsQl3e3SqlEzZCvgoyoXNeg2f+8n4CZvQBqqJ5Q==
   dependencies:
     ethers "^6.9.1"
-    node-tfhe "^0.3.1"
-    tfhe "^0.3.1"
+    node-tfhe "^0.6.1"
+    tfhe "^0.6.1"
     tweetnacl "^1.0.3"
     tweetnacl-util "^0.15.1"
 
@@ -4859,10 +4859,10 @@ node-releases@^2.0.14:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.14.tgz#2ffb053bceb8b2be8495ece1ab6ce600c4461b0b"
   integrity sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==
 
-node-tfhe@^0.3.1:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/node-tfhe/-/node-tfhe-0.3.2.tgz#a480c146de14450683cdd1ea9c0396d0e122b9bd"
-  integrity sha512-jnLtP+RcQIYH1I1zn8S8W/Sn97yJEY5GqA1X7RDmtLezV7NpgO47fFgtd+T7xGNhwpz6yGyww1In7BWOU1jiwg==
+node-tfhe@^0.6.1:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/node-tfhe/-/node-tfhe-0.6.4.tgz#31c32deb88401c4943daadd65892bcccad3b2808"
+  integrity sha512-V/SJjc5GPKIB/KcNGEFSDDQelIKvFIFiCgefeDARgxOnN69fyB+omV4e4j3tMDEz6aN7xRd/NqqQ0im17emXeA==
 
 normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"
@@ -6084,10 +6084,10 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==
 
-tfhe@^0.3.1:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/tfhe/-/tfhe-0.3.2.tgz#a5319a4dbbfe289e9cd2b09a4d2e705cc685324b"
-  integrity sha512-2FTGQKYiusf/PCrRpYFyEzTSFGHRSEMrC49O7HNsUZ8XslL94RJ0mQliE1BRLk9jhPrlZD26M2UF/EO1Gb0mRw==
+tfhe@^0.6.1:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/tfhe/-/tfhe-0.6.4.tgz#9c8c769d37822d27e6a1845abb832d77832b47ae"
+  integrity sha512-80fP2iJJQXrlhyC81u6/aUWMMMDoOXmlY5uqKka2CEd222xM96+z9+FTZc0MjlrR3U+NHja1WOte+A3nlvZkKw==
 
 thenify-all@^1.0.0:
   version "1.6.0"
