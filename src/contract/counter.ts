@@ -91,11 +91,12 @@ export const useCounter = ({ permit, encrypted }: counterProps) => {
     const contract = new ethers.Contract(address, COUNTER_ABI, signer);
 
     //const permit = await getPermit(address, provider);
-    const permit = await generatePermit(address, provider, signer);
+    const permit = await getPermit(address, provider);
     console.log("Permit", permit);
-    //const permission = client.extractPermitPermission(permit);
+    client.storePermit(permit); // store 안해주면 에러남
+    const permission = client.extractPermitPermission(permit);
     try {
-      const counterResult = await contract.getCounterPermitSealed(permit);
+      const counterResult = await contract.getCounterPermitSealed(permission);
       console.log("Counter", counterResult);
       const unsealed = await client.unseal(address, counterResult);
       console.log("Unsealed", unsealed);
