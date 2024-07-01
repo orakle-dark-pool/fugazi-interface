@@ -1,12 +1,6 @@
 import { useWriteContract } from "wagmi";
 import { COUNTER_ABI } from "../abi/counter";
-import {
-  Permit,
-  EncryptedUint32,
-  getPermit,
-  FhenixClient,
-  generatePermit,
-} from "fhenixjs";
+import { Permit, EncryptedUint32, getPermit, FhenixClient } from "fhenixjs";
 import { config } from "../configs/fhenix-config";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
