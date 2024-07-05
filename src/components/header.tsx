@@ -5,7 +5,9 @@ import { switchChain } from "@wagmi/core";
 import { useConnect, useAccount, useDisconnect, useBalance } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { newTestFhenixConfig } from "../configs/fhenix-config";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
+import styled from "@emotion/styled/macro";
 
 export const Header = () => {
   const { connect } = useConnect();
@@ -14,6 +16,7 @@ export const Header = () => {
   const { data: balance } = useBalance({ address });
   const [isItFhenixNetwork, setIsItFhenixNetwork] = useState(false);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     const checkChain = async () => {
@@ -36,10 +39,35 @@ export const Header = () => {
 
   return (
     <Wrapper>
-      <Title onClick={() => navigate("/")}>FuGazi</Title>
-      <NavItem onClick={() => navigate("/swap")}>Swap</NavItem>
-      <NavItem onClick={() => navigate("/claim")}>Claim</NavItem>
-
+      <LogoBox>
+        <Logo src={logo} />
+        <Title onClick={() => navigate("/")}>FuGazi</Title>
+      </LogoBox>
+      <NavItem
+        onClick={() => navigate("/dashboard")}
+        active={pathname === "/dashboard"}
+      >
+        Dashboard
+      </NavItem>
+      <NavItem onClick={() => navigate("/swap")} active={pathname === "/swap"}>
+        Swap
+      </NavItem>
+      <NavItem
+        onClick={() => navigate("/claim")}
+        active={pathname === "/claim"}
+      >
+        Claim
+      </NavItem>
+      {isConnected && (
+        <>
+          <StyledDiv>Address: {address}</StyledDiv>
+          <StyledDiv>symbol: {balance?.symbol}</StyledDiv>
+          <StyledDiv>
+            Balance:{" "}
+            {balance?.value ? formatEther(balance.value) : "Loading..."}
+          </StyledDiv>
+        </>
+      )}
       {!isConnected ? (
         <ConnectButton
           onClick={() =>
@@ -53,37 +81,42 @@ export const Header = () => {
       ) : (
         <ConnectButton onClick={() => disconnect()}>Disconnect</ConnectButton>
       )}
-      {isConnected && (
-        <>
-          <StyledDiv>Address: {address}</StyledDiv>
-          <StyledDiv>symbol: {balance?.symbol}</StyledDiv>
-          <StyledDiv>
-            Balance:{" "}
-            {balance?.value ? formatEther(balance.value) : "Loading..."}
-          </StyledDiv>
-        </>
-      )}
     </Wrapper>
   );
 };
 
 const Wrapper = tw.div`
   flex items-center px-16
-  gap-16 bg-green-300 h-64
+  gap-16 bg-green-1 h-64
+`;
+
+const LogoBox = tw.div`
+  flex items-center  gap-0
+`;
+
+const Logo = tw.img`
+  w-60
 `;
 
 const Title = tw.h1`
   text-2xl font-semibold text-white cursor-pointer
 `;
 
-const NavItem = tw.div`
+interface NavItemProps {
+  active: boolean;
+}
+
+const NavItem = styled.div<NavItemProps>(({ active }) => [
+  tw`
   text-white font-semibold bg-none
-  border-none cursor-pointer
-  hover:bg-green-200 px-16 py-8 rounded-md
-`;
+  border-solid border-2 border-green-2 cursor-pointer
+  hover:bg-green-3 px-16 py-8 rounded-md
+`,
+  active && tw`bg-green-3`,
+]);
 
 const ConnectButton = tw.button`
-  bg-green-200 hover:bg-green-100 text-white font-semibold h-36
+  bg-green-2 hover:bg-green-3 text-white font-semibold h-36
   px-16 py-2 rounded-md 
   border-none
 `;

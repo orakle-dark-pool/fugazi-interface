@@ -13,6 +13,8 @@ import { useAccount } from "wagmi";
 import Loading from "../../components/loading.tsx";
 import { useFhErc20 } from "../../contract/fh-erc20.ts";
 import { useCounter } from "../../contract/counter.ts";
+import logo from "../../assets/logo.png";
+import main1 from "../../assets/main-1.png";
 
 const MainPage = () => {
   //const { isItFhenixNetwork, balance, address, fnxConnect } = useChain();
@@ -139,6 +141,28 @@ const MainPage = () => {
       </StyledButton>
       <StyledButton onClick={handleAddCounter}>Add Counter</StyledButton>
       <StyledButton onClick={handleGetCounter}>Get Counter</StyledButton>
+
+      <ServiceDescription>
+        <LogoImage src={logo} />
+        <TextBox>
+          <ServiceDescriptionTitle>FuGazi</ServiceDescriptionTitle>
+          <ServiceDescriptionSubTitle>
+            FuGazi is a service that allows you to swap tokens on the Helium
+            network.
+          </ServiceDescriptionSubTitle>
+        </TextBox>
+      </ServiceDescription>
+
+      <ServiceDescription>
+        <TextBox>
+          <ServiceDescriptionTitle>FuGazi</ServiceDescriptionTitle>
+          <ServiceDescriptionSubTitle>
+            FuGazi is a service that allows you to swap tokens on the Helium
+            network.
+          </ServiceDescriptionSubTitle>
+        </TextBox>
+        <LogoImage src={main1} />
+      </ServiceDescription>
     </Wrapper>
   );
 };
@@ -160,7 +184,7 @@ const MainPage = () => {
 export default MainPage;
 
 const Wrapper = tw.div`
-  flex flex-col h-screen
+  flex flex-col
 `;
 
 const StyledDiv = tw.div`
@@ -169,7 +193,27 @@ const StyledDiv = tw.div`
 
 const StyledButton = tw.button`
   w-200
-  bg-green-300 hover:bg-green-100 text-white font-semibold h-36
+  bg-green-2 hover:bg-green-3 text-white font-semibold h-36
   px-16 py-2 rounded-md 
-  border-solid border-2 border-green-200
+  border-solid border-2 border-green-2
+`;
+
+const ServiceDescription = tw.div`
+  flex w-full justify-center items-center gap-48
+`;
+
+const LogoImage = tw.img`
+  w-400
+`;
+
+const TextBox = tw.div`
+  flex flex-col gap-24
+`;
+
+const ServiceDescriptionTitle = tw.div`
+  font-xxxl-b text-green-7
+`;
+
+const ServiceDescriptionSubTitle = tw.div`
+  font-xxl-l text-green-6
 `;
