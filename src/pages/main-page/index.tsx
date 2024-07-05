@@ -1,5 +1,5 @@
 import tw from "twin.macro";
-import { BrowserProvider, ethers, JsonRpcProvider } from "ethers";
+import { BrowserProvider, JsonRpcProvider } from "ethers";
 import { Header } from "../../components/header";
 import {
   EncryptedUint32,

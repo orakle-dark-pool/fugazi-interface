@@ -1,4 +1,3 @@
-import React from "react";
 import { Header } from "../../components/header";
 import tw from "twin.macro";
 import claim1 from "../../assets/claim-1.png";
