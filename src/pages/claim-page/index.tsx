@@ -6,17 +6,19 @@ const ClaimPage = () => {
   return (
     <Wrapper>
       <Header />
-      <div>ClaimPage</div>
-      <ClaimWrapper>
-        <ClaimImage src={claim1} alt="claim-1" />
-        <ClaimText>
-          <ClaimTitle>Claim Your Balance</ClaimTitle>
-          <ClaimSubTitle>
-            Please claim your balance by clicking the button below
-          </ClaimSubTitle>
-          <ClaimButton>Claim</ClaimButton>
-        </ClaimText>
-      </ClaimWrapper>
+      <Container>
+        <div>ClaimPage</div>
+        <ClaimWrapper>
+          <ClaimText>
+            <ClaimTitle>Claim Your Balance</ClaimTitle>
+            <ClaimSubTitle>
+              Please claim your balance by clicking the button below
+            </ClaimSubTitle>
+            <ClaimButton>Claim</ClaimButton>
+          </ClaimText>
+          <ClaimImage src={claim1} alt="claim-1" />
+        </ClaimWrapper>
+      </Container>
     </Wrapper>
   );
 };
@@ -25,8 +27,13 @@ const Wrapper = tw.div`
   flex flex-col h-screen
 `;
 
+const Container = tw.div`
+  flex flex-col items-center gap-16
+`;
+
 const ClaimWrapper = tw.div`
-  flex w-full bg-green-1 items-center justify-center
+  flex w-700 bg-green-1 items-center justify-center
+  gap-16 p-48
 `;
 
 const ClaimImage = tw.img`
@@ -34,7 +41,7 @@ const ClaimImage = tw.img`
 `;
 
 const ClaimText = tw.div`
-  flex flex-col gap-4
+  flex flex-col gap-16
 `;
 
 const ClaimTitle = tw.div`
