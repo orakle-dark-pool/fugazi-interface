@@ -43,9 +43,9 @@ const SwapPage = () => {
                   value={inputToken}
                   onChange={(e) => setInputToken(e.target.value)}
                 >
-                  <option value="ETH">ETH</option>
-                  <option value="DAI">DAI</option>
-                  <option value="USDC">USDC</option>
+                  <TokenSelectOption value="ETH">ETH</TokenSelectOption>
+                  <TokenSelectOption value="DAI">DAI</TokenSelectOption>
+                  <TokenSelectOption value="USDC">USDC</TokenSelectOption>
                 </TokenSelect>
               </InputDiv>
             </InputContainer>
@@ -71,9 +71,9 @@ const SwapPage = () => {
                   value={outputToken}
                   onChange={(e) => setOutputToken(e.target.value)}
                 >
-                  <option value="ETH">ETH</option>
-                  <option value="DAI">DAI</option>
-                  <option value="USDC">USDC</option>
+                  <TokenSelectOption value="ETH">ETH</TokenSelectOption>
+                  <TokenSelectOption value="DAI">DAI</TokenSelectOption>
+                  <TokenSelectOption value="USDC">USDC</TokenSelectOption>
                 </TokenSelect>
               </InputDiv>
             </InputContainer>
@@ -100,42 +100,48 @@ const Title = tw.h1`
 
 const InputWrapper = tw.div`
   flex flex-col items-center gap-12
+  
 `;
 
 const InputContainer = tw.div`
-  flex flex-col gap-4 p-8
+  flex flex-col gap-24 
 `;
 
 const InputDiv = tw.div`
-  flex items-center gap-16
+  flex w-380 items-center justify-between
 `;
 
 const InputTitle = tw.div`
-  font-xl-m text-green-1
+  font-xxl-l 
 `;
 
 const InputBox = tw.div`
-  flex items-center w-500 h-150 border-solid border-3 border-green-1 rounded-lg p-2
+  flex items-center w-400 p-48
+  border-solid border-5 border-green-3 rounded-lg p-2
+  bg-green-1
 `;
 
 const StyledInput = tw.input`
-  text-center w-250 h-100
-  border-solid border-2 border-green-1
-  bg-transparent
-  focus:(border-solid border-2 border-green-6)
+  text-center w-250 h-60
+  border-solid border-2 border-green-2
+  bg-green-2
+  focus:(border-solid border-2 border-green-3)
+  focus-visible:outline-none
+  font-xl-m text-green-7
+  
+`;
+
+const TokenSelect = tw.select`
+  bg-green-2
+  border-solid border-2 border-green-2
+  focus:(border-solid border-2 border-green-3)
   focus-visible:outline-none
   font-xl-m text-green-7
   placeholder:(text-green-1)
 `;
 
-const TokenSelect = tw.select`
-  w-100 
-  border-solid border-2 border-green-1
-  focus:(border-solid border-2 border-green-6)
-  focus-visible:outline-none
-  bg-transparent
-  font-xl-m text-green-7
-  placeholder:(text-green-1)
+const TokenSelectOption = tw.option`
+  w-100 bg-green-2
 `;
 
 const SelectedToken = tw.div`

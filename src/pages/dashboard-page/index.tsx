@@ -54,11 +54,11 @@ const ContentWrapper = tw.div`
 `;
 
 const ContentTitle = tw.div`
-  font-xl-m text-green-6
+  font-xl-m 
 `;
 
 const ContentSubTitle = tw.div`
-  font-l-m text-green-6
+  font-l-m 
 `;
 
 export default DashBoard;

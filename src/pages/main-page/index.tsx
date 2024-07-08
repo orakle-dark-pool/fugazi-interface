@@ -211,9 +211,9 @@ const TextBox = tw.div`
 `;
 
 const ServiceDescriptionTitle = tw.div`
-  font-xxxl-b text-green-7
+  font-xxxl-b 
 `;
 
 const ServiceDescriptionSubTitle = tw.div`
-  font-xxl-l text-green-6
+  font-xxl-l 
 `;

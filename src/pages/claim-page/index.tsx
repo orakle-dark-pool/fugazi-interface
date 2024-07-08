@@ -38,11 +38,11 @@ const ClaimText = tw.div`
 `;
 
 const ClaimTitle = tw.div`
-  font-xl-m text-green-6
+  font-xl-m 
 `;
 
 const ClaimSubTitle = tw.div`
-  font-l-m text-green-4
+  font-l-m 
 `;
 
 const ClaimButton = tw.button`
