@@ -105,13 +105,8 @@ const MainPage = () => {
 
   const handleGetBalanceOfEncryptedFugazi = async () => {
     const result = await getBalanceOfEncryptedFugazi();
-    console.log("Result", result);
-    const unsealed = client.unseal(
-      "0x0E3EaCFB2a7b171913840Cb66DE455FCD982FD77",
-      result
-    );
-    console.log("Unsealed", unsealed);
-    setBalanceOfEncryptedFugazi(Number(unsealed));
+
+    setBalanceOfEncryptedFugazi(Number(result));
   };
 
   return (

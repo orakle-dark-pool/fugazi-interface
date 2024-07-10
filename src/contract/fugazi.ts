@@ -47,15 +47,21 @@ export const useFugazi = ({ encrypted }: counterProps) => {
         signer
       );
       console.log("Permit", permit);
-      client.storePermit(permit); // store 안해주면 에러남
+      client.storePermit(permit);
     }
     client.storePermit(permit); // store 안해주면 에러남
+
     const permission = client.extractPermitPermission(permit);
 
     console.log("Permission", permission);
-    const result = await contract.balanceOfEncrypted(address, permission);
-    console.log("Result", result);
-    return result;
+    try {
+      const result = await contract.balanceOfEncrypted(address, permission);
+      const unsealed = client.unseal(fugaziAddress, result);
+      return unsealed;
+    } catch (error) {
+      console.error("Error1", error);
+      return "error";
+    }
   };
 
   return {
