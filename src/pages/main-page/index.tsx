@@ -15,6 +15,9 @@ import { useFhErc20 } from "../../contract/fh-erc20.ts";
 import { useCounter } from "../../contract/counter.ts";
 import logo from "../../assets/logo.png";
 import main1 from "../../assets/main-1.png";
+import { useViewer } from "../../contract/viewer.ts";
+import { useFugazi } from "../../contract/fugazi.ts";
+import { useAccountContract } from "../../contract/account.ts";
 
 const MainPage = () => {
   //const { isItFhenixNetwork, balance, address, fnxConnect } = useChain();
@@ -27,21 +30,27 @@ const MainPage = () => {
   const provider = new JsonRpcProvider("https://api.helium.fhenix.zone/");
   const client = new FhenixClient({ provider });
 
-  const { isPending, getMintEncrypted, getBalanceOfEncrypted } = useFhErc20({
-    permit,
+  const [balanceOfEncryptedFugazi, setBalanceOfEncryptedFugazi] = useState<
+    number | undefined
+  >(undefined);
+
+  const {
+    isPending: isPendingViewer,
+    getViewerPermission,
+    getViewerBalance,
+  } = useViewer({
     encrypted,
-    walletAddress: address,
   });
 
   const {
-    isPending: isPendingCounter,
-    addCounter,
-    getCounter,
-    getCounterPermission,
-  } = useCounter({
-    permit,
+    isPending: isPendingFugazi,
+    approveFugazi,
+    getBalanceOfEncryptedFugazi,
+  } = useFugazi({
     encrypted,
   });
+
+  const { isPending: isPendingAccount, withdraw } = useAccountContract();
 
   useEffect(() => {
     if (isConnected) {
@@ -61,13 +70,6 @@ const MainPage = () => {
     encrypt();
   }, []);
 
-  const handleGetEncryptedBalance = async () => {
-    console.log("Getting encrypted balance");
-    const balance = await getBalanceOfEncrypted();
-    setEncrypted(balance);
-    console.log("encrypted", balance);
-  };
-
   const handleDecryptBalance = async () => {
     if (!encrypted) {
       console.error("Encrypted data is not available");
@@ -81,52 +83,45 @@ const MainPage = () => {
     }
   };
 
-  const handleAddCounter = async () => {
-    const result = await addCounter();
+  const handleGetViewerPermission = async () => {
+    const result = await getViewerPermission();
     console.log("Result", result);
   };
 
-  const handleGetCounter = async () => {
-    const result = await getCounter();
+  const handleGetViewerBalance = async () => {
+    const result = await getViewerBalance();
     console.log("Result", result);
   };
 
-  const getPermitfromWallet = async () => {
-    setIsLoading(true);
-    const contractAddress = "0x100371Fe4B99492a6AEE453FFa46AB8074aae8e4";
-    //const signer = await provider.getSigner();
-    console.log(`loaded permit for ${contractAddress}`);
-    const provider = new BrowserProvider(window.ethereum);
-    let permit = await getPermit(contractAddress, provider);
-    client.storePermit(permit);
-    console.log(permit);
-    // if (!permit) {
-    //   let permit = await client.generatePermit(
-    //     contractAddress,
-    //     undefined,
-    //     signer
-    //   );
-    //   client.storePermit(permit);
-    // }
-    setIsLoading(false);
-    setPermit(permit);
+  const handleApproveFugazi = async () => {
+    const result = await approveFugazi();
+    console.log("Result", result);
   };
 
-  const handleGetCounterPermission = async () => {
-    setIsLoading(true);
-    const result = await getCounterPermission();
+  const handleWithdraw = async () => {
+    const result = await withdraw();
     console.log("Result", result);
-    setIsLoading(false);
+  };
+
+  const handleGetBalanceOfEncryptedFugazi = async () => {
+    const result = await getBalanceOfEncryptedFugazi();
+    console.log("Result", result);
+    const unsealed = client.unseal(
+      "0x0E3EaCFB2a7b171913840Cb66DE455FCD982FD77",
+      result
+    );
+    console.log("Unsealed", unsealed);
+    setBalanceOfEncryptedFugazi(Number(unsealed));
   };
 
   return (
     <Wrapper>
-      {isPending || isPendingCounter || (isLoading && <Loading />)}
+      {/* {isPending || isPendingCounter || (isLoading && <Loading />)} */}
       <Header />
 
-      <StyledDiv>Is Pending: {isPending.toString()}</StyledDiv>
+      {/* <StyledDiv>Is Pending: {isPending.toString()}</StyledDiv> */}
       {/* <StyledDiv>Hash: {hash ? hash : "Loading..."}</StyledDiv> */}
-      <StyledButton onClick={getPermitfromWallet}>Get Permit</StyledButton>
+      {/* <StyledButton onClick={getPermitfromWallet}>Get Permit</StyledButton>
       <StyledButton onClick={handleGetCounterPermission}>
         Get Counter Permission
       </StyledButton>
@@ -140,8 +135,21 @@ const MainPage = () => {
         decrypt Balance
       </StyledButton>
       <StyledButton onClick={handleAddCounter}>Add Counter</StyledButton>
-      <StyledButton onClick={handleGetCounter}>Get Counter</StyledButton>
-
+      <StyledButton onClick={handleGetCounter}>Get Counter</StyledButton> */}
+      <StyledButton onClick={handleGetViewerPermission}>
+        Get Viewer Permission
+      </StyledButton>
+      <StyledButton onClick={handleGetViewerBalance}>
+        Get Viewer Balance
+      </StyledButton>
+      <StyledButton onClick={handleApproveFugazi}>Approve Fugazi</StyledButton>
+      <StyledButton onClick={handleWithdraw}>Withdraw</StyledButton>
+      <StyledButton onClick={handleGetBalanceOfEncryptedFugazi}>
+        Get Balance Of Encrypted Fugazi
+      </StyledButton>
+      <StyledDiv>
+        Balance Of Encrypted Fugazi: {balanceOfEncryptedFugazi}
+      </StyledDiv>
       <ServiceDescription>
         <LogoImage src={logo} />
         <TextBox>

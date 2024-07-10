@@ -1,7 +1,34 @@
-export const ACCOUNT_ABI = [
+export const VIEWER_ABI = [
   {
     inputs: [],
     name: "BatchIsInSettlement",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ECDSAInvalidSignature",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "length",
+        type: "uint256",
+      },
+    ],
+    name: "ECDSAInvalidSignatureLength",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "s",
+        type: "bytes32",
+      },
+    ],
+    name: "ECDSAInvalidSignatureS",
     type: "error",
   },
   {
@@ -197,36 +224,6 @@ export const ACCOUNT_ABI = [
     type: "event",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "recipient",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        components: [
-          {
-            internalType: "bytes",
-            name: "data",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct inEuint32",
-        name: "_amount",
-        type: "tuple",
-      },
-    ],
-    name: "deposit",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "eip712Domain",
     outputs: [
@@ -273,30 +270,80 @@ export const ACCOUNT_ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "recipient",
-        type: "address",
-      },
-      {
-        internalType: "address",
         name: "token",
         type: "address",
       },
       {
         components: [
           {
+            internalType: "bytes32",
+            name: "publicKey",
+            type: "bytes32",
+          },
+          {
             internalType: "bytes",
-            name: "data",
+            name: "signature",
             type: "bytes",
           },
         ],
-        internalType: "struct inEuint32",
-        name: "_amount",
+        internalType: "struct Permission",
+        name: "permission",
         type: "tuple",
       },
     ],
-    name: "withdraw",
-    outputs: [],
-    stateMutability: "nonpayable",
+    name: "getBalance",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "index",
+        type: "uint256",
+      },
+    ],
+    name: "getUnclaimedOrder",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "bytes32",
+            name: "poolId",
+            type: "bytes32",
+          },
+          {
+            internalType: "uint32",
+            name: "epoch",
+            type: "uint32",
+          },
+        ],
+        internalType: "struct FugaziStorageLayout.unclaimedOrderStruct",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getUnclaimedOrdersLength",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
 ];
