@@ -87,7 +87,7 @@ const SwapPage = () => {
 };
 
 const Wrapper = tw.div`
-  flex flex-col h-screen
+  flex flex-col
 `;
 
 const Container = tw.div`
