@@ -4,11 +4,7 @@ import { Permit, EncryptedUint32, getPermit, FhenixClient } from "fhenixjs";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
 
-interface counterProps {
-  encrypted: EncryptedUint32;
-}
-
-export const useViewer = ({ encrypted }: counterProps) => {
+export const useViewer = () => {
   const address = "0xF5F16b5951901BF386C53c992656eEC8038384e3"; //Diamond address
   const [isPending, setIsPending] = useState(false);
   const { writeContract } = useWriteContract();
@@ -51,6 +47,7 @@ export const useViewer = ({ encrypted }: counterProps) => {
     let permit = await getPermit(address, provider);
     client.storePermit(permit);
     console.log("Permit", permit);
+    return permit;
   };
 
   const getViewerBalance = async () => {
@@ -72,7 +69,7 @@ export const useViewer = ({ encrypted }: counterProps) => {
       console.log("Counter", viewBalanceResult);
       const unsealed = await client.unseal(address, viewBalanceResult);
       console.log("Unsealed", unsealed);
-      return viewBalanceResult;
+      return unsealed;
     } catch (error) {
       console.error("Error during contract interaction", error);
       throw error;

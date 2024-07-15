@@ -38,17 +38,13 @@ const MainPage = () => {
     isPending: isPendingViewer,
     getViewerPermission,
     getViewerBalance,
-  } = useViewer({
-    encrypted,
-  });
+  } = useViewer();
 
   const {
     isPending: isPendingFugazi,
     approveFugazi,
     getBalanceOfEncryptedFugazi,
-  } = useFugazi({
-    encrypted,
-  });
+  } = useFugazi();
 
   const { isPending: isPendingAccount, withdraw } = useAccountContract();
 
@@ -105,7 +101,6 @@ const MainPage = () => {
 
   const handleGetBalanceOfEncryptedFugazi = async () => {
     const result = await getBalanceOfEncryptedFugazi();
-
     setBalanceOfEncryptedFugazi(Number(result));
   };
 
@@ -131,20 +126,13 @@ const MainPage = () => {
       </StyledButton>
       <StyledButton onClick={handleAddCounter}>Add Counter</StyledButton>
       <StyledButton onClick={handleGetCounter}>Get Counter</StyledButton> */}
-      <StyledButton onClick={handleGetViewerPermission}>
-        Get Viewer Permission
-      </StyledButton>
-      <StyledButton onClick={handleGetViewerBalance}>
-        Get Viewer Balance
-      </StyledButton>
+
       <StyledButton onClick={handleApproveFugazi}>Approve Fugazi</StyledButton>
       <StyledButton onClick={handleWithdraw}>Withdraw</StyledButton>
       <StyledButton onClick={handleGetBalanceOfEncryptedFugazi}>
         Get Balance Of Encrypted Fugazi
       </StyledButton>
-      <StyledDiv>
-        Balance Of Encrypted Fugazi: {balanceOfEncryptedFugazi}
-      </StyledDiv>
+
       <ServiceDescription>
         <LogoImage src={logo} />
         <TextBox>
@@ -169,20 +157,6 @@ const MainPage = () => {
     </Wrapper>
   );
 };
-
-// const encrypt = async () => {
-//   try {
-//     const provider = new ethers.providers.Web3Provider(window.ethereum);
-//     const client = new FhenixClient({ provider });
-//     const contract = new ethers.Contract(
-//       "0x0165878A594ca255338adfa4d48449f69242Ee9d",
-//       NFT_ABI,
-//       provider.getSigner()
-//     );
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
 
 export default MainPage;
 

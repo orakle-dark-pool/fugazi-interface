@@ -5,20 +5,9 @@ import { IconDown } from "../../components/icon";
 
 const SwapPage = () => {
   const [inputAmount, setInputAmount] = useState("");
-  const [outputAmount, setOutputAmount] = useState("");
   const [inputToken, setInputToken] = useState("ETH");
-  const [outputToken, setOutputToken] = useState("DAI");
 
   const handleSwap = async () => {};
-
-  const handleTokenSwitch = () => {
-    const tempAmount = inputAmount;
-    const tempToken = inputToken;
-    setInputAmount(outputAmount);
-    setOutputAmount(tempAmount);
-    setInputToken(outputToken);
-    setOutputToken(tempToken);
-  };
 
   return (
     <Wrapper>
@@ -50,44 +39,15 @@ const SwapPage = () => {
               </InputDiv>
             </InputContainer>
           </InputBox>
-
-          <SwitchButton onClick={handleTokenSwitch}>
-            <IconDown color="#1BC4C9" style={{ cursor: "pointer" }} />
-          </SwitchButton>
-
-          <InputBox>
-            <InputContainer>
-              <InputTitle>Buy Amount</InputTitle>
-              <InputDiv>
-                <StyledInput
-                  type="text"
-                  value={outputAmount}
-                  onChange={(e) => setOutputAmount(e.target.value)}
-                  placeholder="Output amount"
-                />
-                <SelectedToken>{outputToken}</SelectedToken>
-
-                <TokenSelect
-                  value={outputToken}
-                  onChange={(e) => setOutputToken(e.target.value)}
-                >
-                  <TokenSelectOption value="ETH">ETH</TokenSelectOption>
-                  <TokenSelectOption value="DAI">DAI</TokenSelectOption>
-                  <TokenSelectOption value="USDC">USDC</TokenSelectOption>
-                </TokenSelect>
-              </InputDiv>
-            </InputContainer>
-          </InputBox>
         </InputWrapper>
         <SwapButton onClick={handleSwap}>Swap</SwapButton>
-        <OutputText>Output Amount: {outputAmount}</OutputText>
       </Container>
     </Wrapper>
   );
 };
 
 const Wrapper = tw.div`
-  flex flex-col
+  flex flex-col h-screen
 `;
 
 const Container = tw.div`
@@ -153,9 +113,9 @@ const SwitchButton = tw.button`
 `;
 
 const SwapButton = tw.button`
-  bg-green-2 hover:bg-green-3 text-white font-semibold h-36
+  bg-green-2 hover:bg-green-3 text-white font-xl-m h-48 w-200
   px-16 py-2 rounded-md 
-  border-none
+  border-solid border-2 border-green-3 cursor-pointer
 `;
 
 const OutputText = tw.div`

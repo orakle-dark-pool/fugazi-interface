@@ -43,20 +43,18 @@ export const Header = () => {
         <Logo src={logo} />
         <Title onClick={() => navigate("/")}>FuGazi</Title>
       </LogoBox>
+
+      <NavItem onClick={() => navigate("/swap")} active={pathname === "/swap"}>
+        Swap
+      </NavItem>
+      <NavItem onClick={() => navigate("/pool")} active={pathname === "/pool"}>
+        Pool
+      </NavItem>
       <NavItem
         onClick={() => navigate("/dashboard")}
         active={pathname === "/dashboard"}
       >
         Dashboard
-      </NavItem>
-      <NavItem onClick={() => navigate("/swap")} active={pathname === "/swap"}>
-        Swap
-      </NavItem>
-      <NavItem
-        onClick={() => navigate("/claim")}
-        active={pathname === "/claim"}
-      >
-        Claim
       </NavItem>
       {isConnected && (
         <>

@@ -6,7 +6,7 @@ import { newTestFhenix } from "./configs/fhenix-config.ts";
 
 const MainPage = lazy(() => import("./pages/main-page"));
 const SwapPage = lazy(() => import("./pages/swap-page"));
-const ClaimPage = lazy(() => import("./pages/claim-page"));
+const PoolPage = lazy(() => import("./pages/pool-page/index.tsx"));
 const DashBoard = lazy(() => import("./pages/dashboard-page"));
 
 export const config = createConfig({
@@ -27,7 +27,7 @@ const App = () => {
               <Route path="/" element={<MainPage />} />
               <Route path="/dashboard" element={<DashBoard />} />
               <Route path="/swap" element={<SwapPage />} />
-              <Route path="/claim" element={<ClaimPage />} />
+              <Route path="/pool" element={<PoolPage />} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </BrowserRouter>
