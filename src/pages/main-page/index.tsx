@@ -10,9 +10,6 @@ import {
 } from "fhenixjs";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import Loading from "../../components/loading.tsx";
-import { useFhErc20 } from "../../contract/fh-erc20.ts";
-import { useCounter } from "../../contract/counter.ts";
 import logo from "../../assets/logo.png";
 import main1 from "../../assets/main-1.png";
 import { useViewer } from "../../contract/viewer.ts";
@@ -65,29 +62,6 @@ const MainPage = () => {
     };
     encrypt();
   }, []);
-
-  const handleDecryptBalance = async () => {
-    if (!encrypted) {
-      console.error("Encrypted data is not available");
-      return;
-    }
-    try {
-      const plaintext = await client.unseal(address, encrypted);
-      console.log("Decrypted", plaintext.toString());
-    } catch (error) {
-      console.error("Error during decryption", error);
-    }
-  };
-
-  const handleGetViewerPermission = async () => {
-    const result = await getViewerPermission();
-    console.log("Result", result);
-  };
-
-  const handleGetViewerBalance = async () => {
-    const result = await getViewerDepositBalance();
-    console.log("Result", result);
-  };
 
   const handleApproveFugazi = async () => {
     const result = await approveFugazi();

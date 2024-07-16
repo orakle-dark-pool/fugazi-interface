@@ -6,11 +6,12 @@ import Loading from "../../components/loading";
 import { useFugazi } from "../../contract/fugazi";
 import { useViewer } from "../../contract/viewer";
 import { usePoolActionFacet } from "../../contract/pool-action-facet";
+import { FUGAZI_ADDRESS, USD_ADDRESS } from "../../assets/address";
 
 const DashBoard = () => {
   const [balance, setBalance] = useState(0);
   const [depositBalance, setDepositBalance] = useState(0);
-  const [claimedBalance, setClaimedBalance] = useState(0);
+  const [usdBalance, setUsdBalance] = useState(0);
 
   const {
     isPending: isPendingFugazi,
@@ -18,12 +19,7 @@ const DashBoard = () => {
     getBalanceOfEncryptedFugazi,
   } = useFugazi();
 
-  const {
-    isPending: isPendingViewer,
-    getViewerPermission,
-    getViewerDepositBalance,
-    getViewerClaimedBalance,
-  } = useViewer();
+  const { isPending: isPendingViewer, getViewerDepositBalance } = useViewer();
 
   const { isPending: isPendingAction, claimOrder } = usePoolActionFacet();
 
@@ -32,14 +28,14 @@ const DashBoard = () => {
     setBalance(Number(result));
   };
 
-  const handleGetViewerDepositBalance = async () => {
-    const result = await getViewerDepositBalance();
+  const handleGetViewerDepositFugaziBalance = async () => {
+    const result = await getViewerDepositBalance(FUGAZI_ADDRESS);
     setDepositBalance(Number(result));
   };
 
-  const handleGetViewerClaimedBalance = async () => {
-    const result = await getViewerClaimedBalance();
-    setClaimedBalance(Number(result));
+  const handleGetViewerDepositUsdBalance = async () => {
+    const result = await getViewerDepositBalance(USD_ADDRESS);
+    setUsdBalance(Number(result));
   };
 
   const handleClaimOrder = async () => {
@@ -49,15 +45,11 @@ const DashBoard = () => {
 
   const dummyLiquidity = [
     {
-      token: "ETH",
+      token: "FGZ",
       amount: 0,
     },
     {
-      token: "USDT",
-      amount: 0,
-    },
-    {
-      token: "USDC",
+      token: "USD",
       amount: 0,
     },
   ];
@@ -74,25 +66,28 @@ const DashBoard = () => {
               network.
             </ContentSubTitle>
           </BalanceDescription>
+
           <BalanceButtonWrapper>
             <StyledButton onClick={handleGetBalanceOfEncryptedFugazi}>
-              Check My Balance
+              Check My Balance at Account
             </StyledButton>
 
             <MyBalance>My Balance : {balance}</MyBalance>
           </BalanceButtonWrapper>
+
           <BalanceButtonWrapper>
-            <StyledButton onClick={handleGetViewerDepositBalance}>
-              Check My Deposit Balance
+            <StyledButton onClick={handleGetViewerDepositFugaziBalance}>
+              Check My Deposit Balance at Fugazi
             </StyledButton>
 
             <MyBalance>My Balance : {depositBalance}</MyBalance>
           </BalanceButtonWrapper>
+
           <BalanceButtonWrapper>
-            <StyledButton onClick={handleGetViewerClaimedBalance}>
-              Check My Claimed Balance
+            <StyledButton onClick={handleGetViewerDepositUsdBalance}>
+              Check My Deposit Balance at USD
             </StyledButton>
-            <MyBalance>My Balance : {claimedBalance}</MyBalance>
+            <MyBalance>My Balance : {usdBalance}</MyBalance>
           </BalanceButtonWrapper>
         </BalanceWrapper>
         <LiquidityWrapper>
@@ -149,7 +144,7 @@ const Container = tw.div`
 `;
 
 const BalanceWrapper = tw.div`
-  flex gap-8 p-16 w-600
+  flex flex-col gap-8 p-16 w-600
   bg-green-1
 `;
 
@@ -168,7 +163,7 @@ const MyBalance = tw.div`
 `;
 
 const BalanceButtonWrapper = tw.div`
-  flex flex-col items-center gap-8
+  flex items-center gap-8
 `;
 
 const LiquidityWrapper = tw.div`
@@ -194,7 +189,7 @@ const ContentWrapper = tw.div`
 `;
 
 const ContentTitle = tw.div`
-  font-xl-m 
+  font-xxl-b
 `;
 
 const ContentSubTitle = tw.div`
