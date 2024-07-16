@@ -6,9 +6,7 @@ import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
 
 export const usePoolActionFacet = () => {
-  const poolActionFacetAddress = "0x69b7D2a0A2F68084f0cEd1E7186f1A99e47FB8ac";
-  const poolRegistryFacetAddress = "0x0182871b59d421aAF40d7f204F4142ce939485c2";
-  const diamondAddress = "0xF5F16b5951901BF386C53c992656eEC8038384e3"; //Diamond address
+  const diamondAddress = "0xF5F16b5951901BF386C53c992656eEC8038384e3"; //전체에 사용
 
   const fugaziAddress = "0x0E3EaCFB2a7b171913840Cb66DE455FCD982FD77";
   const fakeUsdAddress = "0xFb289cdE54cBC7B227607912f472c7f6449f6a69";
@@ -23,9 +21,11 @@ export const usePoolActionFacet = () => {
     return { provider, signer };
   };
 
-  const submitSwapOrder = async () => {
+  const submitSwapOrder = async (typedAmount: number, inputToken: string) => {
     const { signer } = await getProviderAndSigner();
     let poolId;
+    let inputTokenAddress;
+    let outputTokenAddress;
     const registryContract = new ethers.Contract(
       diamondAddress,
       POOL_REGISTRY_FACET_ABI,
@@ -47,9 +47,14 @@ export const usePoolActionFacet = () => {
       POOL_ACTION_FACET_ABI,
       signer
     );
-    const inputTokenAddress = fugaziAddress;
-    const outputTokenAddress = fakeUsdAddress;
-    const amountIn = 40;
+    if (inputToken === "FGZ") {
+      inputTokenAddress = fugaziAddress;
+      outputTokenAddress = fakeUsdAddress;
+    } else {
+      inputTokenAddress = fakeUsdAddress;
+      outputTokenAddress = fugaziAddress;
+    }
+    const amountIn = typedAmount;
     const inputAmount =
       inputTokenAddress < outputTokenAddress // is inputToken == tokenX?
         ? (2 << 30) * 0 + (amountIn << 15)

@@ -5,10 +5,11 @@ import { IconDown } from "../../components/icon";
 import { usePoolActionFacet } from "../../contract/pool-action-facet";
 import Loading from "../../components/loading";
 import { useViewer } from "../../contract/viewer";
+import styled from "@emotion/styled/macro";
 
 const SwapPage = () => {
-  const [inputAmount, setInputAmount] = useState("");
-  const [inputToken, setInputToken] = useState("ETH");
+  const [inputAmount, setInputAmount] = useState<number>();
+  const [inputToken, setInputToken] = useState<string>("FGZ");
 
   const {
     isPending: isPendingGetPoolId,
@@ -17,7 +18,7 @@ const SwapPage = () => {
   } = usePoolActionFacet();
 
   const handleSwap = async () => {
-    const result = await submitSwapOrder();
+    const result = await submitSwapOrder(inputAmount, inputToken);
     console.log("result", result);
   };
 
@@ -41,7 +42,7 @@ const SwapPage = () => {
                 <StyledInput
                   type="text"
                   value={inputAmount}
-                  onChange={(e) => setInputAmount(e.target.value)}
+                  onChange={(e) => setInputAmount(Number(e.target.value))}
                   placeholder="Input amount"
                 />
 
@@ -50,16 +51,21 @@ const SwapPage = () => {
                   value={inputToken}
                   onChange={(e) => setInputToken(e.target.value)}
                 >
-                  <TokenSelectOption value="ETH">ETH</TokenSelectOption>
-                  <TokenSelectOption value="DAI">DAI</TokenSelectOption>
-                  <TokenSelectOption value="USDC">USDC</TokenSelectOption>
+                  <TokenSelectOption value="FGZ">FGZ</TokenSelectOption>
+                  <TokenSelectOption value="USD">USD</TokenSelectOption>
                 </TokenSelect>
               </InputDiv>
             </InputContainer>
           </InputBox>
         </InputWrapper>
-        <SwapButton onClick={handleSwap}>Swap</SwapButton>
-        <SwapButton onClick={handleSettle}>Settle</SwapButton>
+        <SwapButton disabled={!inputAmount} onClick={handleSwap}>
+          {!inputAmount
+            ? "Type Amount First"
+            : inputToken === "FGZ"
+            ? "Swap FGZ -> USD"
+            : "Swap USD -> FGZ"}
+        </SwapButton>
+        <SwapButton onClick={handleSettle}>Settle Batch FGZ - USD</SwapButton>
       </Container>
     </Wrapper>
   );
@@ -127,18 +133,17 @@ const SelectedToken = tw.div`
   flex font-xxl-l text-green-1 p-2
 `;
 
-const SwitchButton = tw.button`
-  p-2 rounded-full bg-green-2 hover:bg-green-3 border-none
-`;
+interface SwapButtonProps {
+  disabled?: boolean;
+}
 
-const SwapButton = tw.button`
-  bg-green-2 hover:bg-green-3 text-white font-xl-m h-48 w-200
+const SwapButton = styled.button<SwapButtonProps>(({ disabled }) => [
+  tw`
+  bg-green-2 hover:bg-green-3 text-white font-xl-m h-48 w-300
   px-16 py-2 rounded-md 
   border-solid border-2 border-green-3 cursor-pointer
-`;
-
-const OutputText = tw.div`
-  mt-4 text-lg
-`;
+`,
+  disabled && tw`bg-green-1 hover:bg-green-1 cursor-not-allowed`,
+]);
 
 export default SwapPage;
