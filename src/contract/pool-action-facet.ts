@@ -4,12 +4,13 @@ import { VIEWER_ABI } from "../abi/viewer";
 import { FhenixClient, EncryptionTypes } from "fhenixjs";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
+import {
+  DIAMOND_ADDRESS,
+  FUGAZI_ADDRESS,
+  USD_ADDRESS,
+} from "../assets/address";
 
 export const usePoolActionFacet = () => {
-  const diamondAddress = "0xF5F16b5951901BF386C53c992656eEC8038384e3"; //전체에 사용
-
-  const fugaziAddress = "0x0E3EaCFB2a7b171913840Cb66DE455FCD982FD77";
-  const fakeUsdAddress = "0xFb289cdE54cBC7B227607912f472c7f6449f6a69";
   const [isPending, setIsPending] = useState(false);
 
   const provider = new BrowserProvider(window.ethereum);
@@ -27,13 +28,13 @@ export const usePoolActionFacet = () => {
     let inputTokenAddress;
     let outputTokenAddress;
     const registryContract = new ethers.Contract(
-      diamondAddress,
+      DIAMOND_ADDRESS,
       POOL_REGISTRY_FACET_ABI,
       signer
     );
     setIsPending(true);
     try {
-      poolId = await registryContract.getPoolId(fugaziAddress, fakeUsdAddress);
+      poolId = await registryContract.getPoolId(FUGAZI_ADDRESS, USD_ADDRESS);
       console.log("poolId", poolId);
     } catch (error) {
       console.error("Error", error);
@@ -43,16 +44,16 @@ export const usePoolActionFacet = () => {
     }
 
     const actionContract = new ethers.Contract(
-      diamondAddress,
+      DIAMOND_ADDRESS,
       POOL_ACTION_FACET_ABI,
       signer
     );
     if (inputToken === "FGZ") {
-      inputTokenAddress = fugaziAddress;
-      outputTokenAddress = fakeUsdAddress;
+      inputTokenAddress = FUGAZI_ADDRESS;
+      outputTokenAddress = USD_ADDRESS;
     } else {
-      inputTokenAddress = fakeUsdAddress;
-      outputTokenAddress = fugaziAddress;
+      inputTokenAddress = USD_ADDRESS;
+      outputTokenAddress = FUGAZI_ADDRESS;
     }
     const amountIn = typedAmount;
     const inputAmount =
@@ -85,13 +86,13 @@ export const usePoolActionFacet = () => {
     const { signer } = await getProviderAndSigner();
     let poolId;
     const registryContract = new ethers.Contract(
-      diamondAddress,
+      DIAMOND_ADDRESS,
       POOL_REGISTRY_FACET_ABI,
       signer
     );
     setIsPending(true);
     try {
-      poolId = await registryContract.getPoolId(fugaziAddress, fakeUsdAddress);
+      poolId = await registryContract.getPoolId(FUGAZI_ADDRESS, USD_ADDRESS);
       console.log("poolId", poolId);
     } catch (error) {
       console.error("Error", error);
@@ -101,7 +102,7 @@ export const usePoolActionFacet = () => {
     }
 
     const actionContract = new ethers.Contract(
-      diamondAddress,
+      DIAMOND_ADDRESS,
       POOL_ACTION_FACET_ABI,
       signer
     );
@@ -124,12 +125,12 @@ export const usePoolActionFacet = () => {
     let unlaimedOrdersLength;
     let unclaimedOrder;
     const actionContract = new ethers.Contract(
-      diamondAddress,
+      DIAMOND_ADDRESS,
       POOL_ACTION_FACET_ABI,
       signer
     );
     const viewerContract = new ethers.Contract(
-      diamondAddress,
+      DIAMOND_ADDRESS,
       VIEWER_ABI,
       signer
     );

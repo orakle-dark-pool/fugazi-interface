@@ -1,20 +1,14 @@
 import { FHERC20_ABI } from "../abi/fherc20";
-import { Permit, EncryptedUint32, FhenixClient } from "fhenixjs";
-import { config } from "../configs/fhenix-config";
+import { Permit, FhenixClient } from "fhenixjs";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
 
 interface fhErc20Props {
   permit: Permit;
-  encrypted: EncryptedUint32;
   walletAddress: any;
 }
 
-export const useFhErc20 = ({
-  permit,
-  encrypted,
-  walletAddress,
-}: fhErc20Props) => {
+export const useFhErc20 = ({ permit, walletAddress }: fhErc20Props) => {
   const address = "0x100371Fe4B99492a6AEE453FFa46AB8074aae8e4";
   const provider = new ethers.JsonRpcProvider(
     "https://api.helium.fhenix.zone/"

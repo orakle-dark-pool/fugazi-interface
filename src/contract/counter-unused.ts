@@ -1,16 +1,14 @@
 import { useWriteContract } from "wagmi";
 import { COUNTER_ABI } from "../abi/counter";
-import { Permit, EncryptedUint32, getPermit, FhenixClient } from "fhenixjs";
-import { config } from "../configs/fhenix-config";
+import { EncryptedUint32, getPermit, FhenixClient } from "fhenixjs";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
 
 interface counterProps {
-  permit: Permit;
   encrypted: EncryptedUint32;
 }
 
-export const useCounter = ({ permit, encrypted }: counterProps) => {
+export const useCounter = ({ encrypted }: counterProps) => {
   const address = "0xc5205B400619E87939617096A8385331076C397c";
   const [isPending, setIsPending] = useState(false);
   const { writeContract } = useWriteContract();
