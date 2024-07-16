@@ -4,9 +4,11 @@ import tw from "twin.macro";
 import claim1 from "../../assets/claim-1.png";
 import Loading from "../../components/loading";
 import { useFugazi } from "../../contract/fugazi";
+import { useViewer } from "../../contract/viewer";
 
 const DashBoard = () => {
   const [balance, setBalance] = useState(0);
+  const [depositBalance, setDepositBalance] = useState(0);
 
   const {
     isPending: isPendingFugazi,
@@ -14,9 +16,20 @@ const DashBoard = () => {
     getBalanceOfEncryptedFugazi,
   } = useFugazi();
 
+  const {
+    isPending: isPendingViewer,
+    getViewerPermission,
+    getViewerDepositBalance,
+  } = useViewer();
+
   const handleGetBalanceOfEncryptedFugazi = async () => {
     const result = await getBalanceOfEncryptedFugazi();
     setBalance(Number(result));
+  };
+
+  const handleGetViewerDepositBalance = async () => {
+    const result = await getViewerDepositBalance();
+    setDepositBalance(Number(result));
   };
 
   const dummyLiquidity = [
@@ -52,6 +65,13 @@ const DashBoard = () => {
             </StyledButton>
 
             <MyBalance>My Balance : {balance}</MyBalance>
+          </BalanceButtonWrapper>
+          <BalanceButtonWrapper>
+            <StyledButton onClick={handleGetViewerDepositBalance}>
+              Check My Deposit Balance
+            </StyledButton>
+
+            <MyBalance>My Balance : {depositBalance}</MyBalance>
           </BalanceButtonWrapper>
         </BalanceWrapper>
         <LiquidityWrapper>

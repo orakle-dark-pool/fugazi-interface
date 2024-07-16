@@ -37,7 +37,7 @@ const MainPage = () => {
   const {
     isPending: isPendingViewer,
     getViewerPermission,
-    getViewerBalance,
+    getViewerDepositBalance,
   } = useViewer();
 
   const {
@@ -85,7 +85,7 @@ const MainPage = () => {
   };
 
   const handleGetViewerBalance = async () => {
-    const result = await getViewerBalance();
+    const result = await getViewerDepositBalance();
     console.log("Result", result);
   };
 

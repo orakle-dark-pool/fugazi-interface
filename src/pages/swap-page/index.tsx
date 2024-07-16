@@ -2,15 +2,25 @@ import React, { useState } from "react";
 import { Header } from "../../components/header";
 import tw from "twin.macro";
 import { IconDown } from "../../components/icon";
+import { usePoolActionFacet } from "../../contract/pool-action-facet";
+import Loading from "../../components/loading";
+import { useViewer } from "../../contract/viewer";
 
 const SwapPage = () => {
   const [inputAmount, setInputAmount] = useState("");
   const [inputToken, setInputToken] = useState("ETH");
 
-  const handleSwap = async () => {};
+  const { isPending: isPendingGetPoolId, submitSwapOrder } =
+    usePoolActionFacet();
+
+  const handleSwap = async () => {
+    const result = await submitSwapOrder();
+    console.log("result", result);
+  };
 
   return (
     <Wrapper>
+      {isPendingGetPoolId && <Loading />}
       <Header />
       <Container>
         <Title>Swap Encrypted Tokens</Title>

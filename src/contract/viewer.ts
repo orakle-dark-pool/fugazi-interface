@@ -50,7 +50,7 @@ export const useViewer = () => {
     return permit;
   };
 
-  const getViewerBalance = async () => {
+  const getViewerDepositBalance = async () => {
     const { signer } = await getProviderAndSigner();
     const provider = new BrowserProvider(window.ethereum);
     const client = new FhenixClient({ provider });
@@ -91,6 +91,6 @@ export const useViewer = () => {
   return {
     isPending,
     getViewerPermission,
-    getViewerBalance,
+    getViewerDepositBalance,
   };
 };
