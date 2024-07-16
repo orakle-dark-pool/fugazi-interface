@@ -1,13 +1,11 @@
 import { useWriteContract } from "wagmi";
 import { VIEWER_ABI } from "../abi/viewer";
-import { Permit, EncryptedUint32, getPermit, FhenixClient } from "fhenixjs";
+import { getPermit, FhenixClient } from "fhenixjs";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
+import { DIAMOND_ADDRESS } from "../assets/address";
 
 export const useViewer = () => {
-  const address = "0xF5F16b5951901BF386C53c992656eEC8038384e3"; //Diamond address
-  const fugaziAddress = "0x0E3EaCFB2a7b171913840Cb66DE455FCD982FD77";
-  const usdAddress = "0xFb289cdE54cBC7B227607912f472c7f6449f6a69";
   const [isPending, setIsPending] = useState(false);
   const { writeContract } = useWriteContract();
 
@@ -33,20 +31,11 @@ export const useViewer = () => {
     }
   };
 
-  // const getCounterPermission = async () => {
-  //   return executeContractCall(async () => {
-  //     const { signer } = await getProviderAndSigner();
-  //     const contract = new ethers.Contract(address, COUNTER_ABI, signer);
-  //     const counterPermission = await contract.getCounterPermit(permit);
-  //     console.log("Counter Permission", counterPermission);
-  //     return counterPermission;
-  //   });
-  // };
   const getViewerPermission = async () => {
     const { signer } = await getProviderAndSigner();
     const provider = new BrowserProvider(window.ethereum);
     const client = new FhenixClient({ provider });
-    let permit = await getPermit(address, provider);
+    let permit = await getPermit(DIAMOND_ADDRESS, provider);
     client.storePermit(permit);
     console.log("Permit", permit);
     return permit;
@@ -56,10 +45,8 @@ export const useViewer = () => {
     const { signer } = await getProviderAndSigner();
     const provider = new BrowserProvider(window.ethereum);
     const client = new FhenixClient({ provider });
-    const contract = new ethers.Contract(address, VIEWER_ABI, signer);
-
-    //const permit = await getPermit(address, provider);
-    const permit = await getPermit(address, provider);
+    const contract = new ethers.Contract(DIAMOND_ADDRESS, VIEWER_ABI, signer);
+    const permit = await getPermit(DIAMOND_ADDRESS, provider);
     console.log("Permit", permit);
     client.storePermit(permit); // store 안해주면 에러남
     const permission = client.extractPermitPermission(permit);
@@ -69,7 +56,7 @@ export const useViewer = () => {
         permission
       );
       console.log("Counter", viewBalanceResult);
-      const unsealed = await client.unseal(address, viewBalanceResult);
+      const unsealed = await client.unseal(DIAMOND_ADDRESS, viewBalanceResult);
       console.log("Unsealed", unsealed);
       return unsealed;
     } catch (error) {
@@ -77,18 +64,6 @@ export const useViewer = () => {
       throw error;
     }
   };
-
-  // const getCounter = async () => {
-  //   return executeContractCall(async () => {
-  //     const counterResult = await readContract(config, {
-  //       abi: COUNTER_ABI,
-  //       address,
-  //       functionName: "getCounter",
-  //     });
-  //     console.log("Counter", counterResult);
-  //     return counterResult;
-  //   });
-  // };
 
   return {
     isPending,
