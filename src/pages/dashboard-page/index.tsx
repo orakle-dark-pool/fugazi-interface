@@ -5,10 +5,12 @@ import claim1 from "../../assets/claim-1.png";
 import Loading from "../../components/loading";
 import { useFugazi } from "../../contract/fugazi";
 import { useViewer } from "../../contract/viewer";
+import { usePoolActionFacet } from "../../contract/pool-action-facet";
 
 const DashBoard = () => {
   const [balance, setBalance] = useState(0);
   const [depositBalance, setDepositBalance] = useState(0);
+  const [claimedBalance, setClaimedBalance] = useState(0);
 
   const {
     isPending: isPendingFugazi,
@@ -20,7 +22,10 @@ const DashBoard = () => {
     isPending: isPendingViewer,
     getViewerPermission,
     getViewerDepositBalance,
+    getViewerClaimedBalance,
   } = useViewer();
+
+  const { isPending: isPendingAction, claimOrder } = usePoolActionFacet();
 
   const handleGetBalanceOfEncryptedFugazi = async () => {
     const result = await getBalanceOfEncryptedFugazi();
@@ -30,6 +35,16 @@ const DashBoard = () => {
   const handleGetViewerDepositBalance = async () => {
     const result = await getViewerDepositBalance();
     setDepositBalance(Number(result));
+  };
+
+  const handleGetViewerClaimedBalance = async () => {
+    const result = await getViewerClaimedBalance();
+    setClaimedBalance(Number(result));
+  };
+
+  const handleClaimOrder = async () => {
+    const result = await claimOrder();
+    console.log("Claim Order", result);
   };
 
   const dummyLiquidity = [
@@ -48,7 +63,7 @@ const DashBoard = () => {
   ];
   return (
     <Wrapper>
-      {isPendingFugazi && <Loading />}
+      {isPendingFugazi || isPendingViewer || (isPendingAction && <Loading />)}
       <Header />
       <Container>
         <BalanceWrapper>
@@ -72,6 +87,12 @@ const DashBoard = () => {
             </StyledButton>
 
             <MyBalance>My Balance : {depositBalance}</MyBalance>
+          </BalanceButtonWrapper>
+          <BalanceButtonWrapper>
+            <StyledButton onClick={handleGetViewerClaimedBalance}>
+              Check My Claimed Balance
+            </StyledButton>
+            <MyBalance>My Balance : {claimedBalance}</MyBalance>
           </BalanceButtonWrapper>
         </BalanceWrapper>
         <LiquidityWrapper>
@@ -109,7 +130,7 @@ const DashBoard = () => {
             <ClaimSubTitle>
               Please claim your balance by clicking the button below
             </ClaimSubTitle>
-            <ClaimButton>Claim</ClaimButton>
+            <ClaimButton onClick={handleClaimOrder}>Claim</ClaimButton>
           </ClaimText>
           <ClaimImage src={claim1} alt="claim-1" />
         </ClaimWrapper>

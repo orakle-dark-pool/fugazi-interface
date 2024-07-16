@@ -6,6 +6,8 @@ import { useState } from "react";
 
 export const useViewer = () => {
   const address = "0xF5F16b5951901BF386C53c992656eEC8038384e3"; //Diamond address
+  const fugaziAddress = "0x0E3EaCFB2a7b171913840Cb66DE455FCD982FD77";
+  const usdAddress = "0xFb289cdE54cBC7B227607912f472c7f6449f6a69";
   const [isPending, setIsPending] = useState(false);
   const { writeContract } = useWriteContract();
 
@@ -63,11 +65,33 @@ export const useViewer = () => {
     const permission = client.extractPermitPermission(permit);
     try {
       const viewBalanceResult = await contract.getBalance(
-        "0x0E3EaCFB2a7b171913840Cb66DE455FCD982FD77",
+        fugaziAddress,
         permission
       );
       console.log("Counter", viewBalanceResult);
       const unsealed = await client.unseal(address, viewBalanceResult);
+      console.log("Unsealed", unsealed);
+      return unsealed;
+    } catch (error) {
+      console.error("Error during contract interaction", error);
+      throw error;
+    }
+  };
+  const getViewerClaimedBalance = async () => {
+    const { signer } = await getProviderAndSigner();
+    const provider = new BrowserProvider(window.ethereum);
+    const client = new FhenixClient({ provider });
+    const contract = new ethers.Contract(address, VIEWER_ABI, signer);
+    const permit = await getPermit(address, provider);
+    client.storePermit(permit);
+    const permission = client.extractPermitPermission(permit);
+    try {
+      const viewClaimedBalanceResult = await contract.getBalance(
+        usdAddress,
+        permission
+      );
+      console.log("Claimed Balance", viewClaimedBalanceResult);
+      const unsealed = await client.unseal(address, viewClaimedBalanceResult);
       console.log("Unsealed", unsealed);
       return unsealed;
     } catch (error) {
@@ -92,5 +116,6 @@ export const useViewer = () => {
     isPending,
     getViewerPermission,
     getViewerDepositBalance,
+    getViewerClaimedBalance,
   };
 };

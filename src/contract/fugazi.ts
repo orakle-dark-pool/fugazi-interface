@@ -12,6 +12,7 @@ import { useState } from "react";
 
 export const useFugazi = () => {
   const fugaziAddress = "0x0E3EaCFB2a7b171913840Cb66DE455FCD982FD77";
+
   const diamondAddress = "0xF5F16b5951901BF386C53c992656eEC8038384e3"; //Diamond address
   const [isPending, setIsPending] = useState(false);
   const { writeContract } = useWriteContract();

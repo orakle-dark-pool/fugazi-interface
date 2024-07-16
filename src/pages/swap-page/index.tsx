@@ -10,11 +10,19 @@ const SwapPage = () => {
   const [inputAmount, setInputAmount] = useState("");
   const [inputToken, setInputToken] = useState("ETH");
 
-  const { isPending: isPendingGetPoolId, submitSwapOrder } =
-    usePoolActionFacet();
+  const {
+    isPending: isPendingGetPoolId,
+    submitSwapOrder,
+    settleSwapBatch,
+  } = usePoolActionFacet();
 
   const handleSwap = async () => {
     const result = await submitSwapOrder();
+    console.log("result", result);
+  };
+
+  const handleSettle = async () => {
+    const result = await settleSwapBatch();
     console.log("result", result);
   };
 
@@ -51,6 +59,7 @@ const SwapPage = () => {
           </InputBox>
         </InputWrapper>
         <SwapButton onClick={handleSwap}>Swap</SwapButton>
+        <SwapButton onClick={handleSettle}>Settle</SwapButton>
       </Container>
     </Wrapper>
   );
