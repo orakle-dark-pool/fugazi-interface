@@ -8,6 +8,7 @@ import { newTestFhenixConfig } from "../configs/fhenix-config";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import styled from "@emotion/styled/macro";
+import { truncateAddress } from "../utils/string";
 
 export const Header = () => {
   const { connect } = useConnect();
@@ -39,53 +40,71 @@ export const Header = () => {
 
   return (
     <Wrapper>
-      <LogoBox>
-        <Logo src={logo} />
-        <Title onClick={() => navigate("/")}>FuGazi</Title>
-      </LogoBox>
+      <ForwardContainer>
+        <LogoBox>
+          <Logo src={logo} />
+          <Title onClick={() => navigate("/")}>FuGazi</Title>
+        </LogoBox>
 
-      <NavItem onClick={() => navigate("/swap")} active={pathname === "/swap"}>
-        Swap
-      </NavItem>
-      <NavItem onClick={() => navigate("/pool")} active={pathname === "/pool"}>
-        Pool
-      </NavItem>
-      <NavItem
-        onClick={() => navigate("/dashboard")}
-        active={pathname === "/dashboard"}
-      >
-        Dashboard
-      </NavItem>
-      {isConnected && (
-        <>
-          <StyledDiv>Address: {address}</StyledDiv>
-          <StyledDiv>symbol: {balance?.symbol}</StyledDiv>
-          <StyledDiv>
-            Balance:{" "}
-            {balance?.value ? formatEther(balance.value) : "Loading..."}
-          </StyledDiv>
-        </>
-      )}
-      {!isConnected ? (
-        <ConnectButton
-          onClick={() =>
-            connect({
-              connector: injected(),
-            })
-          }
+        <NavItem
+          onClick={() => navigate("/swap")}
+          active={pathname === "/swap"}
         >
-          Connect
-        </ConnectButton>
-      ) : (
-        <ConnectButton onClick={() => disconnect()}>Disconnect</ConnectButton>
-      )}
+          Swap
+        </NavItem>
+        <NavItem
+          onClick={() => navigate("/pool")}
+          active={pathname === "/pool"}
+        >
+          Pool
+        </NavItem>
+        <NavItem
+          onClick={() => navigate("/dashboard")}
+          active={pathname === "/dashboard"}
+        >
+          Dashboard
+        </NavItem>
+      </ForwardContainer>
+      <BackwardContainer>
+        {isConnected && (
+          <>
+            <StyledDiv>Address: {truncateAddress(address)}</StyledDiv>
+            <StyledDiv>symbol: {balance?.symbol}</StyledDiv>
+            <StyledDiv>
+              Balance:{" "}
+              {balance?.value ? formatEther(balance.value) : "Loading..."}
+            </StyledDiv>
+          </>
+        )}
+        {!isConnected ? (
+          <ConnectButton
+            onClick={() =>
+              connect({
+                connector: injected(),
+              })
+            }
+          >
+            Connect
+          </ConnectButton>
+        ) : (
+          <ConnectButton onClick={() => disconnect()}>Disconnect</ConnectButton>
+        )}
+      </BackwardContainer>
     </Wrapper>
   );
 };
 
 const Wrapper = tw.div`
-  flex items-center px-16
+  flex items-center justify-between px-16
   gap-16 bg-green-1 h-64
+`;
+
+const ForwardContainer = tw.div`
+  flex items-center gap-16
+`;
+
+const BackwardContainer = tw.div`
+  flex items-center gap-16
 `;
 
 const LogoBox = tw.div`
