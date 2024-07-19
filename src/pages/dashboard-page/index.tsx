@@ -55,12 +55,6 @@ const DashBoard = () => {
     },
   ];
 
-  const handleTestLoading = () => {
-    setTestLoading(true);
-    setTimeout(() => {
-      setTestLoading(false);
-    }, 3000);
-  };
   return (
     <Wrapper>
       {isPendingFugazi || isPendingViewer || (isPendingAction && <Loading />)}
@@ -138,8 +132,6 @@ const DashBoard = () => {
           </ClaimText>
           <ClaimImage src={claim1} alt="claim-1" />
         </ClaimWrapper>
-
-        <button onClick={handleTestLoading}>Test Loading</button>
       </Container>
     </Wrapper>
   );

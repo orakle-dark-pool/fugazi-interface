@@ -80,32 +80,7 @@ const MainPage = () => {
 
   return (
     <Wrapper>
-      {/* {isPending || isPendingCounter || (isLoading && <Loading />)} */}
       <Header />
-
-      {/* <StyledDiv>Is Pending: {isPending.toString()}</StyledDiv> */}
-      {/* <StyledDiv>Hash: {hash ? hash : "Loading..."}</StyledDiv> */}
-      {/* <StyledButton onClick={getPermitfromWallet}>Get Permit</StyledButton>
-      <StyledButton onClick={handleGetCounterPermission}>
-        Get Counter Permission
-      </StyledButton>
-      <StyledButton onClick={() => getMintEncrypted()}>
-        Mint Encrypted
-      </StyledButton>
-      <StyledButton onClick={() => handleGetEncryptedBalance()}>
-        Get Balance Of Encrypted
-      </StyledButton>
-      <StyledButton onClick={handleDecryptBalance}>
-        decrypt Balance
-      </StyledButton>
-      <StyledButton onClick={handleAddCounter}>Add Counter</StyledButton>
-      <StyledButton onClick={handleGetCounter}>Get Counter</StyledButton> */}
-
-      <StyledButton onClick={handleApproveFugazi}>Approve Fugazi</StyledButton>
-      <StyledButton onClick={handleWithdraw}>Withdraw</StyledButton>
-      <StyledButton onClick={handleGetBalanceOfEncryptedFugazi}>
-        Get Balance Of Encrypted Fugazi
-      </StyledButton>
 
       <ServiceDescription>
         <LogoImage src={logo} />
@@ -136,10 +111,6 @@ export default MainPage;
 
 const Wrapper = tw.div`
   flex flex-col
-`;
-
-const StyledDiv = tw.div`
-  text-lg p-32
 `;
 
 const StyledButton = tw.button`

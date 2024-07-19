@@ -85,7 +85,6 @@ const Title = tw.h1`
 
 const InputWrapper = tw.div`
   flex flex-col items-center gap-12
-  
 `;
 
 const InputContainer = tw.div`
@@ -143,7 +142,7 @@ const SwapButton = styled.button<SwapButtonProps>(({ disabled }) => [
   px-16 py-2 rounded-md 
   border-solid border-2 border-green-3 cursor-pointer
 `,
-  disabled && tw`bg-green-1 hover:bg-green-1 cursor-not-allowed`,
+  disabled && tw`bg-green-1 hover:bg-green-1 cursor-not-allowed text-gray-400`,
 ]);
 
 export default SwapPage;
