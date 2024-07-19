@@ -12,6 +12,7 @@ const DashBoard = () => {
   const [balance, setBalance] = useState(0);
   const [depositBalance, setDepositBalance] = useState(0);
   const [usdBalance, setUsdBalance] = useState(0);
+  const [testLoading, setTestLoading] = useState(false);
 
   const {
     isPending: isPendingFugazi,
@@ -53,9 +54,17 @@ const DashBoard = () => {
       amount: 0,
     },
   ];
+
+  const handleTestLoading = () => {
+    setTestLoading(true);
+    setTimeout(() => {
+      setTestLoading(false);
+    }, 3000);
+  };
   return (
     <Wrapper>
       {isPendingFugazi || isPendingViewer || (isPendingAction && <Loading />)}
+      {testLoading && <Loading />}
       <Header />
       <Container>
         <BalanceWrapper>
@@ -129,6 +138,8 @@ const DashBoard = () => {
           </ClaimText>
           <ClaimImage src={claim1} alt="claim-1" />
         </ClaimWrapper>
+
+        <button onClick={handleTestLoading}>Test Loading</button>
       </Container>
     </Wrapper>
   );
