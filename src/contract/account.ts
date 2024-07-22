@@ -1,4 +1,3 @@
-import { useWriteContract } from "wagmi";
 import { ACCOUNT_ABI } from "../abi/account";
 import { EncryptedUint32, FhenixClient, EncryptionTypes } from "fhenixjs";
 import { BrowserProvider, JsonRpcProvider, ethers } from "ethers";
@@ -10,7 +9,6 @@ export const useAccountContract = () => {
   const client = new FhenixClient({ provider });
 
   const [isPending, setIsPending] = useState(false);
-  const { writeContract } = useWriteContract();
 
   const getProviderAndSigner = async () => {
     const provider = new BrowserProvider(window.ethereum);
