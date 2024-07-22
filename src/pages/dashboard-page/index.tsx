@@ -12,13 +12,9 @@ const DashBoard = () => {
   const [balance, setBalance] = useState(0);
   const [depositBalance, setDepositBalance] = useState(0);
   const [usdBalance, setUsdBalance] = useState(0);
-  const [testLoading, setTestLoading] = useState(false);
 
-  const {
-    isPending: isPendingFugazi,
-    approveFugazi,
-    getBalanceOfEncryptedFugazi,
-  } = useFugazi();
+  const { isPending: isPendingFugazi, getBalanceOfEncryptedFugazi } =
+    useFugazi();
 
   const { isPending: isPendingViewer, getViewerDepositBalance } = useViewer();
 
@@ -39,11 +35,6 @@ const DashBoard = () => {
     setUsdBalance(Number(result));
   };
 
-  const handleClaimOrder = async () => {
-    const result = await claimOrder();
-    console.log("Claim Order", result);
-  };
-
   const dummyLiquidity = [
     {
       token: "FGZ",
@@ -58,7 +49,7 @@ const DashBoard = () => {
   return (
     <Wrapper>
       {isPendingFugazi || isPendingViewer || (isPendingAction && <Loading />)}
-      {testLoading && <Loading />}
+
       <Header />
       <Container>
         <BalanceWrapper>

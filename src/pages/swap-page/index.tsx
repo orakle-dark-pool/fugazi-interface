@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Header } from "../../components/header";
 import tw from "twin.macro";
-import { IconDown } from "../../components/icon";
 import { usePoolActionFacet } from "../../contract/pool-action-facet";
 import Loading from "../../components/loading";
-import { useViewer } from "../../contract/viewer";
 import styled from "@emotion/styled/macro";
 
 const SwapPage = () => {
