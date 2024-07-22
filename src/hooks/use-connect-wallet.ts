@@ -1,10 +1,11 @@
-import { createConfig, useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 const DEFAULT_CHAIN_ID = "42069";
 
 import { truncateAddress } from "../utils/string";
 
-export const useConnectWallet = (chainId: string = DEFAULT_CHAIN_ID) => {
+export const useConnectWallet = () => {
+  const chainId = DEFAULT_CHAIN_ID;
   const { address, isConnected, isConnecting } = useAccount();
 
   //   const config = createConfig({
