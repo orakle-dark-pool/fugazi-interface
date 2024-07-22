@@ -62,36 +62,39 @@ const DashBoard = () => {
       <Header />
       <Container>
         <BalanceWrapper>
-          <BalanceDescription>
-            <ContentTitle>Check My Balance at FuGazi</ContentTitle>
-            <ContentSubTitle>
-              FuGazi is a service that allows you to swap tokens on the Helium
-              network.
-            </ContentSubTitle>
-          </BalanceDescription>
+          <TextWrapper>
+            <BalanceDescription>
+              <ContentTitle>Check My Balance at FuGazi</ContentTitle>
+              <ContentSubTitle>
+                FuGazi is a service that allows you to swap tokens on the Helium
+                network.
+              </ContentSubTitle>
+            </BalanceDescription>
 
-          <BalanceButtonWrapper>
-            <StyledButton onClick={handleGetBalanceOfEncryptedFugazi}>
-              Check My Balance at Account
-            </StyledButton>
+            <BalanceButtonWrapper>
+              <StyledButton onClick={handleGetBalanceOfEncryptedFugazi}>
+                Check My Balance at Account
+              </StyledButton>
 
-            <MyBalance>My Balance : {balance}</MyBalance>
-          </BalanceButtonWrapper>
+              <MyBalance>My Balance : {balance}</MyBalance>
+            </BalanceButtonWrapper>
 
-          <BalanceButtonWrapper>
-            <StyledButton onClick={handleGetViewerDepositFugaziBalance}>
-              Check My Deposit Balance at Fugazi
-            </StyledButton>
+            <BalanceButtonWrapper>
+              <StyledButton onClick={handleGetViewerDepositFugaziBalance}>
+                Check My Deposit Balance at Fugazi
+              </StyledButton>
 
-            <MyBalance>My Balance : {depositBalance}</MyBalance>
-          </BalanceButtonWrapper>
+              <MyBalance>My Balance : {depositBalance}</MyBalance>
+            </BalanceButtonWrapper>
 
-          <BalanceButtonWrapper>
-            <StyledButton onClick={handleGetViewerDepositUsdBalance}>
-              Check My Deposit Balance at USD
-            </StyledButton>
-            <MyBalance>My Balance : {usdBalance}</MyBalance>
-          </BalanceButtonWrapper>
+            <BalanceButtonWrapper>
+              <StyledButton onClick={handleGetViewerDepositUsdBalance}>
+                Check My Deposit Balance at USD
+              </StyledButton>
+              <MyBalance>My Balance : {usdBalance}</MyBalance>
+            </BalanceButtonWrapper>
+          </TextWrapper>
+          <ClaimImage src={claim1} alt="claim-1" />
         </BalanceWrapper>
         <LiquidityWrapper>
           <ContentTitle>My Liquidity Pool</ContentTitle>
@@ -121,17 +124,6 @@ const DashBoard = () => {
             network.
           </ContentSubTitle>
         </ContentWrapper>
-
-        <ClaimWrapper>
-          <ClaimText>
-            <ClaimTitle>Claim Your Balance</ClaimTitle>
-            <ClaimSubTitle>
-              Please claim your balance by clicking the button below
-            </ClaimSubTitle>
-            <ClaimButton onClick={handleClaimOrder}>Claim</ClaimButton>
-          </ClaimText>
-          <ClaimImage src={claim1} alt="claim-1" />
-        </ClaimWrapper>
       </Container>
     </Wrapper>
   );
@@ -147,8 +139,12 @@ const Container = tw.div`
 `;
 
 const BalanceWrapper = tw.div`
-  flex flex-col gap-8 p-16 w-600
+  flex gap-8 p-16 w-800
   bg-green-1
+`;
+
+const TextWrapper = tw.div`
+  flex flex-col gap-8 justify-center
 `;
 
 const BalanceDescription = tw.div`
@@ -206,25 +202,6 @@ const ClaimWrapper = tw.div`
 
 const ClaimImage = tw.img`
   w-300 h-300
-`;
-
-const ClaimText = tw.div`
-  flex flex-col gap-16
-`;
-
-const ClaimTitle = tw.div`
-  font-xl-m 
-`;
-
-const ClaimSubTitle = tw.div`
-  font-l-m 
-`;
-
-const ClaimButton = tw.button`
-  w-200
-  bg-green-2 hover:bg-green-3 text-white font-semibold h-36
-  px-16 py-2 rounded-md 
-  border-solid border-2 border-green-2
 `;
 
 export default DashBoard;
