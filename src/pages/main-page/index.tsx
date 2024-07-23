@@ -56,5 +56,5 @@ const ServiceDescriptionTitle = tw.div`
 `;
 
 const ServiceDescriptionSubTitle = tw.div`
-  font-xxl-l 
+  font-xxl-b
 `;

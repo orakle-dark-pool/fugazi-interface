@@ -1,4 +1,3 @@
-import { useWriteContract } from "wagmi";
 import { VIEWER_ABI } from "../abi/viewer";
 import { getPermit, FhenixClient } from "fhenixjs";
 import { BrowserProvider, ethers } from "ethers";
@@ -7,7 +6,6 @@ import { DIAMOND_ADDRESS } from "../assets/address";
 
 export const useViewer = () => {
   const [isPending, setIsPending] = useState(false);
-  const { writeContract } = useWriteContract();
 
   const getProviderAndSigner = async () => {
     const provider = new BrowserProvider(window.ethereum);

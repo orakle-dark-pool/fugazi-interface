@@ -40,7 +40,12 @@ export const useFugazi = () => {
 
   const getBalanceOfEncryptedFugazi = async () => {
     const { signer } = await getProviderAndSigner();
-    const address = await signer.getAddress();
+    let address = await signer.getAddress();
+    try {
+      address = await signer.getAddress();
+    } catch (error) {
+      console.error("can't get address", error);
+    }
     const contract = new ethers.Contract(FUGAZI_ADDRESS, FUGAZI_ABI, signer);
 
     const permit = await getPermit(FUGAZI_ADDRESS, provider);
