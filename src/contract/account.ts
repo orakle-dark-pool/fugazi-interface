@@ -32,22 +32,28 @@ export const useAccountContract = () => {
     }
   };
 
-  const withdraw = async () => {
+  const withdraw = async (typedAmount: number) => {
     const { signer } = await getProviderAndSigner();
     const recipient = await signer.getAddress();
     const contract = new ethers.Contract(DIAMOND_ADDRESS, ACCOUNT_ABI, signer);
-
-    const encrypted: EncryptedUint32 = await client.encrypt(
-      100,
-      EncryptionTypes.uint32
-    );
-    const result = await contract.withdraw(
-      recipient,
-      FUGAZI_ADDRESS,
-      encrypted
-    );
-    console.log("Result", result);
-    return result;
+    setIsPending(true);
+    try {
+      const encrypted: EncryptedUint32 = await client.encrypt(
+        typedAmount,
+        EncryptionTypes.uint32
+      );
+      const result = await contract.withdraw(
+        recipient,
+        FUGAZI_ADDRESS,
+        encrypted
+      );
+      console.log("Result", result);
+      return result;
+    } catch (error) {
+      handleError(error, "Error during contract interaction");
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return {

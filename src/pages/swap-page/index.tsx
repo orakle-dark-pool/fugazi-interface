@@ -6,7 +6,7 @@ import Loading from "../../components/loading";
 import styled from "@emotion/styled/macro";
 
 const SwapPage = () => {
-  const [inputAmount, setInputAmount] = useState<number>();
+  const [inputAmount, setInputAmount] = useState<string>("");
   const [inputToken, setInputToken] = useState<string>("FGZ");
 
   const {
@@ -16,7 +16,7 @@ const SwapPage = () => {
   } = usePoolActionFacet();
 
   const handleSwap = async () => {
-    const result = await submitSwapOrder(inputAmount, inputToken);
+    const result = await submitSwapOrder(Number(inputAmount), inputToken);
     console.log("result", result);
   };
 
@@ -40,7 +40,7 @@ const SwapPage = () => {
                 <StyledInput
                   type="text"
                   value={inputAmount}
-                  onChange={(e) => setInputAmount(Number(e.target.value))}
+                  onChange={(e) => setInputAmount(e.target.value)}
                   placeholder="Input amount"
                 />
 
@@ -110,7 +110,6 @@ const StyledInput = tw.input`
   focus:(border-solid border-2 border-green-3)
   focus-visible:outline-none
   font-xl-m text-green-7
-  
 `;
 
 const TokenSelect = tw.select`

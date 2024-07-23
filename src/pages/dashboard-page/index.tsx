@@ -7,11 +7,13 @@ import { useFugazi } from "../../contract/fugazi";
 import { useViewer } from "../../contract/viewer";
 import { usePoolActionFacet } from "../../contract/pool-action-facet";
 import { FUGAZI_ADDRESS, USD_ADDRESS } from "../../assets/address";
+import { useAccountContract } from "../../contract/account";
 
 const DashBoard = () => {
   const [balance, setBalance] = useState(0);
   const [depositBalance, setDepositBalance] = useState(0);
   const [usdBalance, setUsdBalance] = useState(0);
+  const [withdrawAmount, setWithdrawAmount] = useState<string>("");
 
   const { isPending: isPendingFugazi, getBalanceOfEncryptedFugazi } =
     useFugazi();
@@ -19,6 +21,8 @@ const DashBoard = () => {
   const { isPending: isPendingViewer, getViewerDepositBalance } = useViewer();
 
   const { isPending: isPendingAction, claimOrder } = usePoolActionFacet();
+
+  const { isPending: isPendingAccount, withdraw } = useAccountContract();
 
   const handleGetBalanceOfEncryptedFugazi = async () => {
     const result = await getBalanceOfEncryptedFugazi();
@@ -35,6 +39,20 @@ const DashBoard = () => {
     setUsdBalance(Number(result));
   };
 
+  const handleClaimOrder = async () => {
+    const result = await claimOrder();
+    console.log("Claim Order", result);
+  };
+
+  const handleWithdraw = async () => {
+    const result = await withdraw(Number(withdrawAmount));
+    console.log("Withdraw", result);
+  };
+
+  const handleWithdrawAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWithdrawAmount(e.target.value);
+  };
+
   const dummyLiquidity = [
     {
       token: "FGZ",
@@ -48,7 +66,10 @@ const DashBoard = () => {
 
   return (
     <Wrapper>
-      {isPendingFugazi || isPendingViewer || (isPendingAction && <Loading />)}
+      {isPendingFugazi ||
+        isPendingViewer ||
+        isPendingAction ||
+        (isPendingAccount && <Loading />)}
 
       <Header />
       <Container>
@@ -64,7 +85,7 @@ const DashBoard = () => {
 
             <BalanceButtonWrapper>
               <StyledButton onClick={handleGetBalanceOfEncryptedFugazi}>
-                Check My Balance at Account
+                Check My FGZ Balance at Account
               </StyledButton>
 
               <MyBalance>My Balance : {balance}</MyBalance>
@@ -72,7 +93,7 @@ const DashBoard = () => {
 
             <BalanceButtonWrapper>
               <StyledButton onClick={handleGetViewerDepositFugaziBalance}>
-                Check My Deposit Balance at Fugazi
+                Check My FGZ Balance at Deposit
               </StyledButton>
 
               <MyBalance>My Balance : {depositBalance}</MyBalance>
@@ -80,13 +101,35 @@ const DashBoard = () => {
 
             <BalanceButtonWrapper>
               <StyledButton onClick={handleGetViewerDepositUsdBalance}>
-                Check My Deposit Balance at USD
+                Check My USD Balance at Deposit
               </StyledButton>
               <MyBalance>My Balance : {usdBalance}</MyBalance>
             </BalanceButtonWrapper>
           </TextWrapper>
-          <ClaimImage src={claim1} alt="claim-1" />
+          <ClaimImageWrapper>
+            <ClaimImage src={claim1} alt="claim-1" />
+            <ClaimButton onClick={handleClaimOrder}>Claim</ClaimButton>
+          </ClaimImageWrapper>
         </BalanceWrapper>
+
+        <ContentWrapper>
+          <ContentTitle>Withdraw Balance</ContentTitle>
+          <ContentSubTitle>
+            Withdraw your FGZ balance from Deposit
+          </ContentSubTitle>
+          <WithdrawInputWrapper>
+            <StyledInput
+              type="text"
+              value={withdrawAmount}
+              onChange={handleWithdrawAmount}
+              placeholder="Withdraw FGZ Amount"
+            />
+            <StyledButton onClick={handleWithdraw}>
+              Withdraw FGZ from Deposit
+            </StyledButton>
+          </WithdrawInputWrapper>
+        </ContentWrapper>
+
         <LiquidityWrapper>
           <ContentTitle>My Liquidity Pool</ContentTitle>
           <ContentSubTitle>
@@ -101,13 +144,7 @@ const DashBoard = () => {
             </Liquidity>
           ))}
         </LiquidityWrapper>
-        <ContentWrapper>
-          <ContentTitle>Claimed Balance</ContentTitle>
-          <ContentSubTitle>
-            FuGazi is a service that allows you to swap tokens on the Helium
-            network.
-          </ContentSubTitle>
-        </ContentWrapper>
+
         <ContentWrapper>
           <ContentTitle>Transaction History</ContentTitle>
           <ContentSubTitle>
@@ -135,11 +172,11 @@ const BalanceWrapper = tw.div`
 `;
 
 const TextWrapper = tw.div`
-  flex flex-col gap-8 justify-center
+  flex flex-col gap-16 justify-center
 `;
 
 const BalanceDescription = tw.div`
-  flex flex-col gap-4
+  flex flex-col gap-16
 `;
 
 const StyledButton = tw.button`
@@ -154,6 +191,32 @@ const MyBalance = tw.div`
 
 const BalanceButtonWrapper = tw.div`
   flex items-center gap-8
+`;
+
+const WithdrawInputWrapper = tw.div`
+  flex items-center gap-8
+`;
+
+const WithdrawInputLabel = tw.div`
+  font-l-m
+`;
+const StyledInput = tw.input`
+  text-center w-250 h-40
+  border-solid border-2 border-green-2
+  bg-green-2
+  focus:(border-solid border-2 border-green-3)
+  focus-visible:outline-none
+  font-xl-m text-green-7
+`;
+
+const ClaimImageWrapper = tw.div`
+  flex flex-col items-center gap-8
+`;
+
+const ClaimButton = tw.button`
+  bg-green-2 hover:bg-green-3 text-white font-semibold h-36 w-150
+  px-16 py-2 rounded-md 
+  border-none
 `;
 
 const LiquidityWrapper = tw.div`
@@ -174,7 +237,7 @@ const LiquidityAmount = tw.div`
 `;
 
 const ContentWrapper = tw.div`
-  flex flex-col gap-8 p-16 w-600
+  flex flex-col gap-16 p-16 w-600
   bg-green-1
 `;
 
