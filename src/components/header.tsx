@@ -108,11 +108,11 @@ const BackwardContainer = tw.div`
 `;
 
 const LogoBox = tw.div`
-  flex items-center  gap-0
+  flex items-center  gap-8
 `;
 
 const Logo = tw.img`
-  w-60
+  w-30
 `;
 
 const Title = tw.h1`

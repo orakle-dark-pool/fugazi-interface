@@ -8,19 +8,18 @@ const MainPage = () => {
   return (
     <Wrapper>
       <Header />
+      <Body>
+        <ServiceDescription>
+          <LogoImage src={logo} />
+          <TextBox>
+            <ServiceDescriptionTitle>FuGazi</ServiceDescriptionTitle>
+            <ServiceDescriptionSubTitle>
+              We are the Most Authentic and the Most Secure Dark Pool
+            </ServiceDescriptionSubTitle>
+          </TextBox>
+        </ServiceDescription>
 
-      <ServiceDescription>
-        <LogoImage src={logo} />
-        <TextBox>
-          <ServiceDescriptionTitle>FuGazi</ServiceDescriptionTitle>
-          <ServiceDescriptionSubTitle>
-            FuGazi is a service that allows you to swap tokens on the Helium
-            network.
-          </ServiceDescriptionSubTitle>
-        </TextBox>
-      </ServiceDescription>
-
-      <ServiceDescription>
+        {/* <ServiceDescription>
         <TextBox>
           <ServiceDescriptionTitle>FuGazi</ServiceDescriptionTitle>
           <ServiceDescriptionSubTitle>
@@ -28,7 +27,8 @@ const MainPage = () => {
           </ServiceDescriptionSubTitle>
         </TextBox>
         <LogoImage src={main1} />
-      </ServiceDescription>
+      </ServiceDescription> */}
+      </Body>
     </Wrapper>
   );
 };
@@ -36,25 +36,29 @@ const MainPage = () => {
 export default MainPage;
 
 const Wrapper = tw.div`
-  flex flex-col
+  flex flex-col h-screen gap-48
+`;
+
+const Body = tw.div`
+  flex flex-col h-full justify-center items-center
 `;
 
 const ServiceDescription = tw.div`
-  flex w-full justify-center items-center gap-48
+  flex flex-col w-full justify-center items-center gap-12
 `;
 
 const LogoImage = tw.img`
-  w-400
+  w-300 object-contain
 `;
 
 const TextBox = tw.div`
-  flex flex-col gap-24
+  flex flex-col gap-24 text-center
 `;
 
 const ServiceDescriptionTitle = tw.div`
-  font-xxxl-b 
+  text-80 font-bold
 `;
 
 const ServiceDescriptionSubTitle = tw.div`
-  font-xxl-b
+  text-40 font-semibold
 `;
