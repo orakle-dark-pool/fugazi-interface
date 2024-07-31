@@ -56,7 +56,7 @@ export const Header = () => {
           onClick={() => navigate("/pool")}
           active={pathname === "/pool"}
         >
-          Pool
+          Provide Liquidity
         </NavItem>
         <NavItem
           onClick={() => navigate("/dashboard")}
