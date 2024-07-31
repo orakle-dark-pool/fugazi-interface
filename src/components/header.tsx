@@ -96,11 +96,11 @@ export const Header = () => {
 
 const Wrapper = tw.div`
   flex items-center justify-between px-16
-  gap-16 bg-green-1 h-64
+  gap-16 bg-green-1 h-64 
 `;
 
 const ForwardContainer = tw.div`
-  flex items-center gap-16
+  flex items-center gap-16 min-w-600
 `;
 
 const BackwardContainer = tw.div`
@@ -139,5 +139,5 @@ const ConnectButton = tw.button`
 `;
 
 const StyledDiv = tw.div`
-  font-l-b text-white
+  font-l-b text-white whitespace-nowrap
 `;
