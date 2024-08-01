@@ -31,7 +31,11 @@ const DashBoard = () => {
     getViewerLpBalance,
   } = useViewer();
 
-  const { isPending: isPendingAction, claimOrder } = usePoolActionFacet();
+  const {
+    isPending: isPendingAction,
+    claimOrder,
+    removeLiquidity,
+  } = usePoolActionFacet();
 
   const {
     isPending: isPendingAccount,
@@ -85,6 +89,11 @@ const DashBoard = () => {
   const handleGetLpBalance = async () => {
     const result = await getViewerLpBalance();
     setLpBalance(Number(result));
+  };
+
+  const handleRemoveLiquidity = async () => {
+    const result = await removeLiquidity();
+    console.log("Remove Liquidity", result);
   };
 
   useEffect(() => {
@@ -230,7 +239,9 @@ const DashBoard = () => {
               </LiquidityTitle>
               <LiquidityAmount>LP Token Balance : {lpBalance}</LiquidityAmount>
 
-              <WithdrawButton>Remove Liquidity</WithdrawButton>
+              <WithdrawButton onClick={handleRemoveLiquidity}>
+                Remove Liquidity
+              </WithdrawButton>
             </Liquidity>
           ))}
         </LiquidityWrapper>
