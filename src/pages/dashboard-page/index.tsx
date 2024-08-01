@@ -10,12 +10,14 @@ import { FUGAZI_ADDRESS, USD_ADDRESS } from "../../assets/address";
 import { useAccountContract } from "../../contract/account";
 import usdLogo from "../../assets/usd.png";
 import fgzLogo from "../../assets/logo.png";
+import styled from "@emotion/styled";
 
 const DashBoard = () => {
   const [balance, setBalance] = useState(0);
   const [depositBalance, setDepositBalance] = useState(0);
   const [usdBalance, setUsdBalance] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState<string>("");
+  const [canSettle, setCanSettle] = useState(true);
 
   const { isPending: isPendingFugazi, getBalanceOfEncryptedFugazi } =
     useFugazi();
@@ -25,6 +27,9 @@ const DashBoard = () => {
   const { isPending: isPendingAction, claimOrder } = usePoolActionFacet();
 
   const { isPending: isPendingAccount, withdraw } = useAccountContract();
+
+  const { isPending: isPendingGetPoolId, settleSwapBatch } =
+    usePoolActionFacet();
 
   const handleGetBalanceOfEncryptedFugazi = async () => {
     const result = await getBalanceOfEncryptedFugazi();
@@ -55,6 +60,11 @@ const DashBoard = () => {
     setWithdrawAmount(e.target.value);
   };
 
+  const handleSettle = async () => {
+    const result = await settleSwapBatch();
+    console.log("result", result);
+  };
+
   const dummyLiquidity = [
     {
       token1: "FGZ",
@@ -76,13 +86,11 @@ const DashBoard = () => {
     {
       Pair: "FGZ-USD",
       Epoch: 1,
-      Type: "Buy",
       Time: "2021-01-01 12:00:00",
     },
     {
       Pair: "FGZ-USD",
       Epoch: 2,
-      Type: "Sell",
       Time: "2021-01-01 12:00:00",
     },
   ];
@@ -92,6 +100,7 @@ const DashBoard = () => {
       {isPendingFugazi ||
         isPendingViewer ||
         isPendingAction ||
+        isPendingGetPoolId ||
         (isPendingAccount && <Loading />)}
 
       <Header />
@@ -135,6 +144,24 @@ const DashBoard = () => {
           </ClaimImageWrapper>
         </BalanceWrapper>
 
+        <ContentWrapper>
+          <ContentTitle>Withdraw Balance</ContentTitle>
+          <ContentSubTitle>
+            Withdraw your FGZ balance from Deposit
+          </ContentSubTitle>
+          <WithdrawInputWrapper>
+            <StyledInput
+              type="text"
+              value={withdrawAmount}
+              onChange={handleWithdrawAmount}
+              placeholder="Withdraw FGZ Amount"
+            />
+            <StyledButton onClick={handleWithdraw}>
+              Withdraw FGZ from Deposit
+            </StyledButton>
+          </WithdrawInputWrapper>
+        </ContentWrapper>
+
         <LiquidityWrapper>
           <ContentTitle>LP Balances</ContentTitle>
 
@@ -159,25 +186,7 @@ const DashBoard = () => {
         </LiquidityWrapper>
 
         <ContentWrapper>
-          <ContentTitle>Withdraw Balance</ContentTitle>
-          <ContentSubTitle>
-            Withdraw your FGZ balance from Deposit
-          </ContentSubTitle>
-          <WithdrawInputWrapper>
-            <StyledInput
-              type="text"
-              value={withdrawAmount}
-              onChange={handleWithdrawAmount}
-              placeholder="Withdraw FGZ Amount"
-            />
-            <StyledButton onClick={handleWithdraw}>
-              Withdraw FGZ from Deposit
-            </StyledButton>
-          </WithdrawInputWrapper>
-        </ContentWrapper>
-
-        <ContentWrapper>
-          <ContentTitle>My Orders</ContentTitle>
+          <ContentTitle>UnClaimed Orders</ContentTitle>
           <ContentSubTitle>
             FuGazi is a service that allows you to swap tokens on the Helium
             network.
@@ -186,9 +195,11 @@ const DashBoard = () => {
             <Order key={index}>
               <OrderText>Pair : {order.Pair}</OrderText>
               <OrderText>Epoch : {order.Epoch}</OrderText>
-              <OrderText>Type : {order.Type}</OrderText>
               <OrderText>Time : {order.Time}</OrderText>
-              <OrderButton>Settle & Claim</OrderButton>
+              <OrderButton disabled={canSettle} onClick={handleSettle}>
+                {canSettle ? "Settle" : "Can't settle yet"}
+              </OrderButton>
+              <OrderButton>Claim</OrderButton>
             </Order>
           ))}
         </ContentWrapper>
@@ -315,12 +326,18 @@ const ClaimImage = tw.img`
 const Order = tw.div`
   flex items-center justify-between p-8 gap-8 bg-green-2
 `;
+interface orderButtonInterface {
+  disabled?: boolean;
+}
 
-const OrderButton = tw.button`
-  bg-green-2 hover:bg-green-3 text-white font-semibold h-36 w-150
+const OrderButton = styled.button<orderButtonInterface>(({ disabled }) => [
+  tw`
+  bg-green-2 hover:bg-green-3 text-white font-xl-m h-36 w-150
   px-16 py-2 rounded-md 
-  border-solid border-green-3 border-2
-`;
+  border-solid border-2 border-green-3 cursor-pointer
+`,
+  disabled && tw`bg-green-1 hover:bg-green-1 cursor-not-allowed text-gray-400`,
+]);
 
 const OrderText = tw.div`
   font-l-m
