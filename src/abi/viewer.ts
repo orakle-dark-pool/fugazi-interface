@@ -305,6 +305,102 @@ export const VIEWER_ABI = [
   {
     inputs: [
       {
+        internalType: "bytes32",
+        name: "poolId",
+        type: "bytes32",
+      },
+      {
+        components: [
+          {
+            internalType: "bytes32",
+            name: "publicKey",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes",
+            name: "signature",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct Permission",
+        name: "permission",
+        type: "tuple",
+      },
+    ],
+    name: "getLPBalance",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "poolId",
+        type: "bytes32",
+      },
+    ],
+    name: "getPoolInfo",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
+      },
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "poolId",
+        type: "bytes32",
+      },
+      {
+        components: [
+          {
+            internalType: "bytes32",
+            name: "publicKey",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes",
+            name: "signature",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct Permission",
+        name: "permission",
+        type: "tuple",
+      },
+    ],
+    name: "getPrice",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "index",
         type: "uint256",
@@ -328,6 +424,31 @@ export const VIEWER_ABI = [
         internalType: "struct FugaziStorageLayout.unclaimedOrderStruct",
         name: "",
         type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getUnclaimedOrders",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "bytes32",
+            name: "poolId",
+            type: "bytes32",
+          },
+          {
+            internalType: "uint32",
+            name: "epoch",
+            type: "uint32",
+          },
+        ],
+        internalType: "struct FugaziStorageLayout.unclaimedOrderStruct[]",
+        name: "",
+        type: "tuple[]",
       },
     ],
     stateMutability: "view",

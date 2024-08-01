@@ -3,6 +3,7 @@ import { EncryptedUint32, FhenixClient, EncryptionTypes } from "fhenixjs";
 import { BrowserProvider, JsonRpcProvider, ethers } from "ethers";
 import { useState } from "react";
 import { DIAMOND_ADDRESS, FUGAZI_ADDRESS } from "../assets/address";
+import { FUGAZI_ABI } from "../abi/fugazi";
 
 export const useAccountContract = () => {
   const provider = new JsonRpcProvider("https://api.helium.fhenix.zone/");
@@ -56,8 +57,43 @@ export const useAccountContract = () => {
     }
   };
 
+  const deposit = async (typedAmount: number) => {
+    const { signer } = await getProviderAndSigner();
+    const contract = new ethers.Contract(DIAMOND_ADDRESS, ACCOUNT_ABI, signer);
+    const tokenContract = new ethers.Contract(
+      FUGAZI_ADDRESS,
+      FUGAZI_ABI,
+      signer
+    );
+
+    setIsPending(true);
+    try {
+      const encrypted: EncryptedUint32 = await client.encrypt(
+        typedAmount,
+        EncryptionTypes.uint32
+      );
+      const approve = await tokenContract.approveEncrypted(
+        DIAMOND_ADDRESS,
+        encrypted
+      );
+      console.log("Approve", approve);
+      const result = await contract.deposit(
+        signer.getAddress(),
+        FUGAZI_ADDRESS,
+        encrypted
+      );
+      console.log("Result", result);
+      return result;
+    } catch (error) {
+      handleError(error, "Error during contract interaction");
+    } finally {
+      setIsPending(false);
+    }
+  };
+
   return {
     isPending,
     withdraw,
+    deposit,
   };
 };

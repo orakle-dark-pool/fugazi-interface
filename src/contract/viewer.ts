@@ -2,11 +2,17 @@ import { VIEWER_ABI } from "../abi/viewer";
 import { getPermit, FhenixClient } from "fhenixjs";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
-import { DIAMOND_ADDRESS } from "../assets/address";
+import {
+  DIAMOND_ADDRESS,
+  FUGAZI_ADDRESS,
+  USD_ADDRESS,
+} from "../assets/address";
+import { POOL_REGISTRY_FACET_ABI } from "../abi/pool-registry-facet";
 
 export const useViewer = () => {
   const [isPending, setIsPending] = useState(false);
-
+  const provider = new BrowserProvider(window.ethereum);
+  const client = new FhenixClient({ provider });
   const getProviderAndSigner = async () => {
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -63,9 +69,42 @@ export const useViewer = () => {
     }
   };
 
+  const getViewerLpBalance = async () => {
+    const { signer } = await getProviderAndSigner();
+    const viewerContract = new ethers.Contract(
+      DIAMOND_ADDRESS,
+      VIEWER_ABI,
+      signer
+    );
+    const registryContract = new ethers.Contract(
+      DIAMOND_ADDRESS,
+      POOL_REGISTRY_FACET_ABI,
+      signer
+    );
+    const permit = await getPermit(DIAMOND_ADDRESS, provider);
+    console.log("Permit", permit);
+    client.storePermit(permit);
+    setIsPending(true);
+    try {
+      const poolId = await registryContract.getPoolId(
+        FUGAZI_ADDRESS,
+        USD_ADDRESS
+      );
+      const lpBalance = await viewerContract.getLPBalance(poolId, permit);
+      const unsealed = await client.unseal(DIAMOND_ADDRESS, lpBalance);
+      console.log("Lp Balance", lpBalance);
+      return unsealed;
+    } catch (error) {
+      handleError(error, "Error during contract interaction");
+    } finally {
+      setIsPending(false);
+    }
+  };
+
   return {
     isPending,
     getViewerPermission,
     getViewerDepositBalance,
+    getViewerLpBalance,
   };
 };

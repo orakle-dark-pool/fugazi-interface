@@ -1,7 +1,7 @@
 import { POOL_ACTION_FACET_ABI } from "../abi/pool-action-facet";
 import { POOL_REGISTRY_FACET_ABI } from "../abi/pool-registry-facet";
 import { VIEWER_ABI } from "../abi/viewer";
-import { FhenixClient, EncryptionTypes } from "fhenixjs";
+import { FhenixClient, EncryptionTypes, EncryptedUint32 } from "fhenixjs";
 import { BrowserProvider, ethers } from "ethers";
 import { useState } from "react";
 import {
@@ -168,10 +168,48 @@ export const usePoolActionFacet = () => {
     }
   };
 
+  const removeLiquidity = async () => {
+    const { signer } = await getProviderAndSigner();
+
+    const registryContract = new ethers.Contract(
+      DIAMOND_ADDRESS,
+      POOL_REGISTRY_FACET_ABI,
+      signer
+    );
+
+    const actionContract = new ethers.Contract(
+      DIAMOND_ADDRESS,
+      POOL_ACTION_FACET_ABI,
+      signer
+    );
+    setIsPending(true);
+    try {
+      const poolId = await registryContract.getPoolId(
+        FUGAZI_ADDRESS,
+        USD_ADDRESS
+      );
+
+      const encrypted: EncryptedUint32 = await client.encrypt(
+        100,
+        EncryptionTypes.uint32
+      );
+
+      const result = await actionContract.removeLiquidity(poolId, encrypted);
+      console.log("remove liquidity result", result);
+      return result;
+    } catch (error) {
+      console.error("Remove Liquidity Error", error);
+      return "error";
+    } finally {
+      setIsPending(false);
+    }
+  };
+
   return {
     isPending,
     submitSwapOrder,
     settleSwapBatch,
     claimOrder,
+    removeLiquidity,
   };
 };

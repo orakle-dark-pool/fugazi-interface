@@ -38,7 +38,7 @@ export const useFugazi = () => {
     return result;
   };
 
-  const getBalanceOfEncryptedFugazi = async () => {
+  const getBalanceOfEncryptedFugazi = async ({ tokenAddress }) => {
     const { signer } = await getProviderAndSigner();
     let address = await signer.getAddress();
     try {
@@ -46,12 +46,12 @@ export const useFugazi = () => {
     } catch (error) {
       console.error("can't get address", error);
     }
-    const contract = new ethers.Contract(FUGAZI_ADDRESS, FUGAZI_ABI, signer);
+    const contract = new ethers.Contract(tokenAddress, FUGAZI_ABI, signer);
 
-    const permit = await getPermit(FUGAZI_ADDRESS, provider);
+    const permit = await getPermit(tokenAddress, provider);
     if (!permit) {
       const permit = await client.generatePermit(
-        FUGAZI_ADDRESS,
+        tokenAddress,
         undefined,
         signer
       );
@@ -65,7 +65,7 @@ export const useFugazi = () => {
     console.log("Permission", permission);
     try {
       const result = await contract.balanceOfEncrypted(address, permission);
-      const unsealed = client.unseal(FUGAZI_ADDRESS, result);
+      const unsealed = client.unseal(tokenAddress, result);
       return unsealed;
     } catch (error) {
       console.error("Error1", error);
