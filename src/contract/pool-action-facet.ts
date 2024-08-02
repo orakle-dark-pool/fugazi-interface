@@ -168,7 +168,10 @@ export const usePoolActionFacet = () => {
     }
   };
 
-  const removeLiquidity = async () => {
+  const removeLiquidity = async (
+    tokenAddress1: string,
+    tokenAddress2: string
+  ) => {
     const { signer } = await getProviderAndSigner();
 
     const registryContract = new ethers.Contract(
@@ -185,8 +188,8 @@ export const usePoolActionFacet = () => {
     setIsPending(true);
     try {
       const poolId = await registryContract.getPoolId(
-        FUGAZI_ADDRESS,
-        USD_ADDRESS
+        tokenAddress1,
+        tokenAddress2
       );
 
       const encrypted: EncryptedUint32 = await client.encrypt(

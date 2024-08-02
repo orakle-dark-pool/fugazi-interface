@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { Header } from "../../components/header";
 import tw from "twin.macro";
-import claim1 from "../../assets/claim-1.png";
 import Loading from "../../components/loading";
 import { useFugazi } from "../../contract/fugazi";
 import { useViewer } from "../../contract/viewer";
 import { usePoolActionFacet } from "../../contract/pool-action-facet";
-import { FUGAZI_ADDRESS, USD_ADDRESS } from "../../assets/address";
+import { ADDRESSES, FUGAZI_ADDRESS, USD_ADDRESS } from "../../assets/address";
 import { useAccountContract } from "../../contract/account";
 import usdLogo from "../../assets/usd.png";
 import fgzLogo from "../../assets/logo.png";
@@ -17,6 +16,8 @@ const DashBoard = () => {
   const [depositBalance, setDepositBalance] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState<string>("");
   const [depositAmount, setDepositAmount] = useState<string>("");
+  const [removeLiquidityAmount, setRemoveLiquidityAmount] =
+    useState<string>("");
   const [canSettle, setCanSettle] = useState(true);
   const [tokenName, setTokenName] = useState<string>("FGZ");
   const [tokenAddress, setTokenAddress] = useState<string>(FUGAZI_ADDRESS);
@@ -91,8 +92,11 @@ const DashBoard = () => {
     setLpBalance(Number(result));
   };
 
-  const handleRemoveLiquidity = async () => {
-    const result = await removeLiquidity();
+  const handleRemoveLiquidity = async (
+    tokenAddress1: string,
+    tokenAddress2: string
+  ) => {
+    const result = await removeLiquidity(tokenAddress1, tokenAddress2);
     console.log("Remove Liquidity", result);
   };
 
@@ -177,22 +181,24 @@ const DashBoard = () => {
         <ContentWrapper>
           <ContentTitle>Token Balance</ContentTitle>
           <TokenBalanceContainer>
-            <TokenSelect
-              value={tokenName}
-              onChange={(e) => {
-                setTokenAddress(
-                  e.target.value === "FGZ" ? FUGAZI_ADDRESS : USD_ADDRESS
-                );
-                setTokenName(e.target.value);
-              }}
-            >
-              <TokenSelectOption value="FGZ">FGZ</TokenSelectOption>
-              <TokenSelectOption value="USD">USD</TokenSelectOption>
-            </TokenSelect>
-            <TokenBalanceText>My Balance : {balance}</TokenBalanceText>
-            <TokenBalanceText>
-              Deposit Balance : {depositBalance}
-            </TokenBalanceText>
+            <BalanceBox>
+              <TokenSelect
+                value={tokenName}
+                onChange={(e) => {
+                  setTokenAddress(
+                    e.target.value === "FGZ" ? FUGAZI_ADDRESS : USD_ADDRESS
+                  );
+                  setTokenName(e.target.value);
+                }}
+              >
+                <TokenSelectOption value="FGZ">FGZ</TokenSelectOption>
+                <TokenSelectOption value="USD">USD</TokenSelectOption>
+              </TokenSelect>
+              <TokenBalanceText>My Balance : {balance}</TokenBalanceText>
+              <TokenBalanceText>
+                Deposit Balance : {depositBalance}
+              </TokenBalanceText>
+            </BalanceBox>
 
             <WithdrawInputWrapper>
               <StyledInput
@@ -239,7 +245,14 @@ const DashBoard = () => {
               </LiquidityTitle>
               <LiquidityAmount>LP Token Balance : {lpBalance}</LiquidityAmount>
 
-              <WithdrawButton onClick={handleRemoveLiquidity}>
+              <WithdrawButton
+                onClick={() =>
+                  handleRemoveLiquidity(
+                    ADDRESSES[liquidity.token1],
+                    ADDRESSES[liquidity.token2]
+                  )
+                }
+              >
                 Remove Liquidity
               </WithdrawButton>
             </Liquidity>
@@ -319,6 +332,10 @@ const TokenBalanceContainer = tw.div`
   flex flex-col items-center justify-between p-8 gap-8 bg-green-2
 `;
 
+const BalanceBox = tw.div`
+  flex items-center justify-between p-8 gap-8 bg-green-2
+`;
+
 const TokenSelect = tw.select`
   bg-green-2
   border-solid border-2 border-green-3
@@ -332,21 +349,14 @@ const TokenSelectOption = tw.option`
   w-100 bg-green-2
 `;
 
-const SelectedToken = tw.div`
-  flex font-xxl-l text-green-1 p-2 text-white
-`;
-
 const TokenBalanceText = tw.div`
-  font-l-m text-white
+  font-xl-m  text-white
 `;
 
 const WithdrawInputWrapper = tw.div`
   flex items-center gap-8
 `;
 
-const WithdrawInputLabel = tw.div`
-  font-l-m
-`;
 const StyledInput = tw.input`
   text-center w-250 h-40
   border-solid border-2 border-green-3
