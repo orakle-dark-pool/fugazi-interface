@@ -69,7 +69,10 @@ export const useViewer = () => {
     }
   };
 
-  const getViewerLpBalance = async () => {
+  const getViewerLpBalance = async (
+    tokenAddress1: string,
+    tokenAddress2: string
+  ) => {
     const { signer } = await getProviderAndSigner();
     const viewerContract = new ethers.Contract(
       DIAMOND_ADDRESS,
@@ -87,8 +90,8 @@ export const useViewer = () => {
     setIsPending(true);
     try {
       const poolId = await registryContract.getPoolId(
-        FUGAZI_ADDRESS,
-        USD_ADDRESS
+        tokenAddress1,
+        tokenAddress2
       );
       const lpBalance = await viewerContract.getLPBalance(poolId, permit);
       const unsealed = await client.unseal(DIAMOND_ADDRESS, lpBalance);

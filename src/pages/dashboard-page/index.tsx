@@ -11,17 +11,45 @@ import usdLogo from "../../assets/usd.png";
 import fgzLogo from "../../assets/logo.png";
 import styled from "@emotion/styled";
 
+const dummyLiquidity = [
+  {
+    token1: "FGZ",
+    token2: "USD",
+    token1Logo: fgzLogo,
+    token2Logo: usdLogo,
+    amount: 0,
+  },
+  {
+    token1: "FGZ",
+    token2: "USD",
+    token1Logo: fgzLogo,
+    token2Logo: usdLogo,
+    amount: 1,
+  },
+];
+
+const dummyOrders = [
+  {
+    Pair: "FGZ-USD",
+    Epoch: 1,
+    Time: "2021-01-01 12:00:00",
+  },
+  {
+    Pair: "FGZ-USD",
+    Epoch: 2,
+    Time: "2021-01-01 12:00:00",
+  },
+];
+
 const DashBoard = () => {
   const [balance, setBalance] = useState(0);
   const [depositBalance, setDepositBalance] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState<string>("");
   const [depositAmount, setDepositAmount] = useState<string>("");
-  const [removeLiquidityAmount, setRemoveLiquidityAmount] =
-    useState<string>("");
   const [canSettle, setCanSettle] = useState(true);
   const [tokenName, setTokenName] = useState<string>("FGZ");
   const [tokenAddress, setTokenAddress] = useState<string>(FUGAZI_ADDRESS);
-  const [lpBalance, setLpBalance] = useState(0);
+  const [lpBalance, setLpBalance] = useState<number[]>([]);
 
   const { isPending: isPendingFugazi, getBalanceOfEncryptedFugazi } =
     useFugazi();
@@ -64,13 +92,13 @@ const DashBoard = () => {
     console.log("Claim Order", result);
   };
 
-  const handleWithdrawAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setWithdrawAmount(e.target.value);
-  };
-
   const handleSettle = async () => {
     const result = await settleSwapBatch();
     console.log("result", result);
+  };
+
+  const handleWithdrawAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWithdrawAmount(e.target.value);
   };
 
   const handleDepositAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,18 +106,22 @@ const DashBoard = () => {
   };
 
   const handleWithdraw = async () => {
-    const result = await withdraw(Number(withdrawAmount));
+    const result = await withdraw(Number(withdrawAmount), tokenAddress);
     console.log("Withdraw", result);
   };
 
   const handleDeposit = async () => {
-    const result = await deposit(Number(depositAmount));
+    const result = await deposit(Number(depositAmount), tokenAddress);
     console.log("Deposit", result);
   };
 
-  const handleGetLpBalance = async () => {
-    const result = await getViewerLpBalance();
-    setLpBalance(Number(result));
+  const handleGetLpBalance = async (
+    tokenAddress1: string,
+    tokenAddress2: string
+  ) => {
+    const result = await getViewerLpBalance(tokenAddress1, tokenAddress2);
+    console.log("LP Balance", result);
+    return result;
   };
 
   const handleRemoveLiquidity = async (
@@ -103,31 +135,21 @@ const DashBoard = () => {
   useEffect(() => {
     handleGetBalanceOfEncryptedToken();
     handleGetViewerDepositTokenBalance();
-    handleGetLpBalance();
+    const fetchLpBalances = async () => {
+      const balances = [];
+      for (const liquidity of dummyLiquidity) {
+        const result = await handleGetLpBalance(
+          ADDRESSES[liquidity.token1],
+          ADDRESSES[liquidity.token2]
+        );
+        console.log("LP Balance", result);
+        balances.push(result);
+      }
+      setLpBalance(balances);
+      console.log("LP Balances", balances);
+    };
+    fetchLpBalances();
   }, [tokenAddress]);
-
-  const dummyLiquidity = [
-    {
-      token1: "FGZ",
-      token2: "USD",
-      token1Logo: fgzLogo,
-      token2Logo: usdLogo,
-      amount: 0,
-    },
-  ];
-
-  const dummyOrders = [
-    {
-      Pair: "FGZ-USD",
-      Epoch: 1,
-      Time: "2021-01-01 12:00:00",
-    },
-    {
-      Pair: "FGZ-USD",
-      Epoch: 2,
-      Time: "2021-01-01 12:00:00",
-    },
-  ];
 
   return (
     <Wrapper>
@@ -243,7 +265,10 @@ const DashBoard = () => {
               <LiquidityTitle>
                 {liquidity.token1} - {liquidity.token2}
               </LiquidityTitle>
-              <LiquidityAmount>LP Token Balance : {lpBalance}</LiquidityAmount>
+              <LiquidityAmount>
+                LP Token Balance :{" "}
+                {lpBalance.length > 0 ? Number(lpBalance[index]) : "loading..."}
+              </LiquidityAmount>
 
               <WithdrawButton
                 onClick={() =>

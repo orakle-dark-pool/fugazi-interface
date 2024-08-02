@@ -33,7 +33,7 @@ export const useAccountContract = () => {
     }
   };
 
-  const withdraw = async (typedAmount: number) => {
+  const withdraw = async (typedAmount: number, tokenAddress: string) => {
     const { signer } = await getProviderAndSigner();
     const recipient = await signer.getAddress();
     const contract = new ethers.Contract(DIAMOND_ADDRESS, ACCOUNT_ABI, signer);
@@ -45,7 +45,7 @@ export const useAccountContract = () => {
       );
       const result = await contract.withdraw(
         recipient,
-        FUGAZI_ADDRESS,
+        tokenAddress,
         encrypted
       );
       console.log("Result", result);
@@ -57,7 +57,7 @@ export const useAccountContract = () => {
     }
   };
 
-  const deposit = async (typedAmount: number) => {
+  const deposit = async (typedAmount: number, tokenAddress: string) => {
     const { signer } = await getProviderAndSigner();
     const contract = new ethers.Contract(DIAMOND_ADDRESS, ACCOUNT_ABI, signer);
     const tokenContract = new ethers.Contract(
@@ -79,7 +79,7 @@ export const useAccountContract = () => {
       console.log("Approve", approve);
       const result = await contract.deposit(
         signer.getAddress(),
-        FUGAZI_ADDRESS,
+        tokenAddress,
         encrypted
       );
       console.log("Result", result);
