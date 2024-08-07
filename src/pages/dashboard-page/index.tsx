@@ -33,6 +33,13 @@ const dummyLiquidity = [
     token2Logo: eurLogo,
     amount: 1,
   },
+  {
+    token1: "USD",
+    token2: "EUR",
+    token1Logo: usdLogo,
+    token2Logo: eurLogo,
+    amount: 1,
+  },
 ];
 
 const dummyOrders = [
@@ -57,6 +64,7 @@ const DashBoard = () => {
   const [tokenName, setTokenName] = useState<string>("FGZ");
   const [tokenAddress, setTokenAddress] = useState<string>(FUGAZI_ADDRESS);
   const [lpBalance, setLpBalance] = useState<number[]>([]);
+  const [unclaimedOrders, setUnclaimedOrders] = useState<any[]>([]);
 
   const { isPending: isPendingFugazi, getBalanceOfEncryptedFugazi } =
     useFugazi();
@@ -65,6 +73,7 @@ const DashBoard = () => {
     isPending: isPendingViewer,
     getViewerDepositBalance,
     getViewerLpBalance,
+    getUnclaimedOrders,
   } = useViewer();
 
   const {
@@ -151,9 +160,16 @@ const DashBoard = () => {
     console.log("Claim Test Token", result);
   };
 
+  const handleGetUnclaimedOrders = async () => {
+    const result = await getUnclaimedOrders();
+    setUnclaimedOrders(result);
+    console.log("Unclaimed Orders", result);
+  };
+
   useEffect(() => {
     handleGetBalanceOfEncryptedToken();
     handleGetViewerDepositTokenBalance();
+    handleGetUnclaimedOrders();
     const fetchLpBalances = async () => {
       const balances = [];
       for (const liquidity of dummyLiquidity) {

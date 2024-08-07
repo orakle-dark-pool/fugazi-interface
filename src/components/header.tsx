@@ -6,7 +6,7 @@ import { useConnect, useAccount, useDisconnect, useBalance } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { newTestFhenixConfig } from "../configs/fhenix-config";
 import { useLocation, useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo-width.png";
 import styled from "@emotion/styled/macro";
 import { truncateAddress } from "../utils/string";
 
@@ -43,7 +43,7 @@ export const Header = () => {
       <ForwardContainer>
         <LogoBox>
           <Logo src={logo} />
-          <Title onClick={() => navigate("/")}>FuGazi</Title>
+          {/* <Title onClick={() => navigate("/")}>FuGazi</Title> */}
         </LogoBox>
 
         <NavItem
@@ -112,7 +112,7 @@ const LogoBox = tw.div`
 `;
 
 const Logo = tw.img`
-  w-30
+  w-100
 `;
 
 const Title = tw.h1`

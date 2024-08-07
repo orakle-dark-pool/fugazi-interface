@@ -104,10 +104,31 @@ export const useViewer = () => {
     }
   };
 
+  const getUnclaimedOrders = async () => {
+    const { signer } = await getProviderAndSigner();
+    const contract = new ethers.Contract(DIAMOND_ADDRESS, VIEWER_ABI, signer);
+
+    try {
+      setIsPending(true);
+      const unclaimedOrders = await contract.getUnclaimedOrders();
+      const results = unclaimedOrders.map((order) => ({
+        0: order[0],
+        1: order[1],
+      }));
+      console.log("Unclaimed Orders", results);
+      return results;
+    } catch (error) {
+      handleError(error, "Error during contract interaction");
+    } finally {
+      setIsPending(false);
+    }
+  };
+
   return {
     isPending,
     getViewerPermission,
     getViewerDepositBalance,
     getViewerLpBalance,
+    getUnclaimedOrders,
   };
 };

@@ -1,7 +1,7 @@
 import tw from "twin.macro";
 import { Header } from "../../components/header";
 
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo-length.png";
 import main1 from "../../assets/main-1.png";
 
 const MainPage = () => {
@@ -12,7 +12,7 @@ const MainPage = () => {
         <ServiceDescription>
           <LogoImage src={logo} />
           <TextBox>
-            <ServiceDescriptionTitle>FuGazi</ServiceDescriptionTitle>
+            {/* <ServiceDescriptionTitle>FuGazi</ServiceDescriptionTitle> */}
             <ServiceDescriptionSubTitle>
               We are the Most Authentic and the Most Secure Dark Pool
             </ServiceDescriptionSubTitle>
@@ -48,7 +48,7 @@ const ServiceDescription = tw.div`
 `;
 
 const LogoImage = tw.img`
-  w-300 object-contain
+  w-400 object-contain
 `;
 
 const TextBox = tw.div`
