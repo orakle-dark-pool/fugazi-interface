@@ -5,10 +5,16 @@ import Loading from "../../components/loading";
 import { useFugazi } from "../../contract/fugazi";
 import { useViewer } from "../../contract/viewer";
 import { usePoolActionFacet } from "../../contract/pool-action-facet";
-import { ADDRESSES, FUGAZI_ADDRESS, USD_ADDRESS } from "../../assets/address";
+import {
+  ADDRESSES,
+  EUR_ADDRESS,
+  FUGAZI_ADDRESS,
+  USD_ADDRESS,
+} from "../../assets/address";
 import { useAccountContract } from "../../contract/account";
 import usdLogo from "../../assets/usd.png";
 import fgzLogo from "../../assets/logo.png";
+import eurLogo from "../../assets/eur.png";
 import styled from "@emotion/styled";
 
 const dummyLiquidity = [
@@ -21,9 +27,9 @@ const dummyLiquidity = [
   },
   {
     token1: "FGZ",
-    token2: "USD",
+    token2: "EUR",
     token1Logo: fgzLogo,
-    token2Logo: usdLogo,
+    token2Logo: eurLogo,
     amount: 1,
   },
 ];
@@ -130,6 +136,12 @@ const DashBoard = () => {
   ) => {
     const result = await removeLiquidity(tokenAddress1, tokenAddress2);
     console.log("Remove Liquidity", result);
+  };
+
+  const handleClaimTestToken = async (tokenAddress: string) => {
+    //const result = await claimTestToken(tokenAddress);
+    const result = "test";
+    console.log("Claim Test Token", result);
   };
 
   useEffect(() => {
@@ -302,13 +314,28 @@ const DashBoard = () => {
             </Order>
           ))}
         </ContentWrapper>
+
+        <ContentWrapper>
+          <ContentTitle>Claim Test Token</ContentTitle>
+          <TestContainer>
+            <TestButton onClick={() => handleClaimTestToken(FUGAZI_ADDRESS)}>
+              Claim Test FGZ
+            </TestButton>
+            <TestButton onClick={() => handleClaimTestToken(USD_ADDRESS)}>
+              Claim Test USD
+            </TestButton>
+            <TestButton onClick={() => handleClaimTestToken(EUR_ADDRESS)}>
+              Claim Test EUR
+            </TestButton>
+          </TestContainer>
+        </ContentWrapper>
       </Container>
     </Wrapper>
   );
 };
 
 const Wrapper = tw.div`
-  flex flex-col 
+  flex flex-col
 `;
 
 const Container = tw.div`
@@ -476,6 +503,16 @@ const OrderText = tw.div`
 
 const OrderEpoch = tw.div`
   font-l-m
+`;
+
+const TestContainer = tw.div`
+  flex items-center justify-center gap-8
+`;
+
+const TestButton = tw.button`
+  bg-green-2 hover:bg-green-3 text-white font-xl-m h-48 w-200
+  px-16 py-2 rounded-md 
+  border-solid border-2 border-green-3 cursor-pointer
 `;
 
 export default DashBoard;
