@@ -182,7 +182,7 @@ export const VIEWER_ABI = [
         type: "uint32",
       },
     ],
-    name: "epochSettled",
+    name: "batchSettled",
     type: "event",
   },
   {
@@ -370,6 +370,11 @@ export const VIEWER_ABI = [
         type: "bytes32",
       },
       {
+        internalType: "bool",
+        name: "YoverX",
+        type: "bool",
+      },
+      {
         components: [
           {
             internalType: "bytes32",
@@ -442,11 +447,22 @@ export const VIEWER_ABI = [
           },
           {
             internalType: "uint32",
-            name: "epoch",
+            name: "orderEpoch",
+            type: "uint32",
+          },
+          {
+            internalType: "uint32",
+            name: "poolEpoch",
+            type: "uint32",
+          },
+          {
+            internalType: "uint32",
+            name: "lastSettlement",
             type: "uint32",
           },
         ],
-        internalType: "struct FugaziStorageLayout.unclaimedOrderStruct[]",
+        internalType:
+          "struct FugaziStorageLayout.unclaimedOrderForViewerStruct[]",
         name: "",
         type: "tuple[]",
       },

@@ -111,10 +111,23 @@ export const useViewer = () => {
     try {
       setIsPending(true);
       const unclaimedOrders = await contract.getUnclaimedOrders();
-      const results = unclaimedOrders.map((order) => ({
-        0: order[0],
-        1: order[1],
-      }));
+
+      const results = unclaimedOrders.map((order) => {
+        const timestamp = BigInt(order[3]);
+        const date = new Date(Number(timestamp) * 1000); // Convert to milliseconds
+        const settlable =
+          timestamp < BigInt(Math.floor(Date.now() / 1000) + 30) &&
+          order[1] == order[2];
+        console.log(`Order ${order[0]} is within 30 seconds:`, settlable);
+        console.log(`Order ${order[0]} timestamp:`, date.toISOString());
+        return {
+          0: order[0],
+          1: order[1] < order[2], // can claim
+          2: date.toISOString(),
+          3: settlable, //can settle
+        };
+      });
+
       console.log("Unclaimed Orders", results);
       return results;
     } catch (error) {
