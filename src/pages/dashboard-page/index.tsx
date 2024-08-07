@@ -16,6 +16,7 @@ import usdLogo from "../../assets/usd.png";
 import fgzLogo from "../../assets/logo.png";
 import eurLogo from "../../assets/eur.png";
 import styled from "@emotion/styled";
+import { useDistributor } from "../../contract/distributor";
 
 const dummyLiquidity = [
   {
@@ -88,6 +89,12 @@ const DashBoard = () => {
     setBalance(Number(result));
   };
 
+  const {
+    isPending: isPendingDistributor,
+    claimTestToken,
+    handleError,
+  } = useDistributor();
+
   const handleGetViewerDepositTokenBalance = async () => {
     const result = await getViewerDepositBalance(tokenAddress);
     setDepositBalance(Number(result));
@@ -139,8 +146,8 @@ const DashBoard = () => {
   };
 
   const handleClaimTestToken = async (tokenAddress: string) => {
-    //const result = await claimTestToken(tokenAddress);
-    const result = "test";
+    const result = await claimTestToken(tokenAddress);
+
     console.log("Claim Test Token", result);
   };
 
@@ -165,11 +172,12 @@ const DashBoard = () => {
 
   return (
     <Wrapper>
-      {isPendingFugazi ||
+      {(isPendingFugazi ||
         isPendingViewer ||
         isPendingAction ||
         isPendingGetPoolId ||
-        (isPendingAccount && <Loading />)}
+        isPendingDistributor ||
+        isPendingAccount) && <Loading />}
 
       <Header />
       <Container>
@@ -220,13 +228,18 @@ const DashBoard = () => {
                 value={tokenName}
                 onChange={(e) => {
                   setTokenAddress(
-                    e.target.value === "FGZ" ? FUGAZI_ADDRESS : USD_ADDRESS
+                    e.target.value === "FGZ"
+                      ? FUGAZI_ADDRESS
+                      : e.target.value === "USD"
+                      ? USD_ADDRESS
+                      : EUR_ADDRESS
                   );
                   setTokenName(e.target.value);
                 }}
               >
                 <TokenSelectOption value="FGZ">FGZ</TokenSelectOption>
                 <TokenSelectOption value="USD">USD</TokenSelectOption>
+                <TokenSelectOption value="EUR">EUR</TokenSelectOption>
               </TokenSelect>
               <TokenBalanceText>My Balance : {balance}</TokenBalanceText>
               <TokenBalanceText>
