@@ -19,7 +19,7 @@ const MainPage = () => {
           <TextBox>
             {/* <ServiceDescriptionTitle>FuGazi</ServiceDescriptionTitle> */}
             <ServiceDescriptionSubTitle>
-              We are the Most Authentic and the Most Secure Dark Pool
+              We are the Most Authentic and the Most Secure Dark Pool.
             </ServiceDescriptionSubTitle>
           </TextBox>
         </ServiceDescription>

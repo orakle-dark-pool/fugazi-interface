@@ -42,7 +42,7 @@ export const Header = () => {
     <Wrapper>
       <ForwardContainer>
         <LogoBox>
-          <Logo src={logo} />
+          <Logo onClick={() => navigate("/")} src={logo} />
           {/* <Title onClick={() => navigate("/")}>FuGazi</Title> */}
         </LogoBox>
 
@@ -112,7 +112,7 @@ const LogoBox = tw.div`
 `;
 
 const Logo = tw.img`
-  w-100
+  w-100 cursor-pointer
 `;
 
 const Title = tw.h1`

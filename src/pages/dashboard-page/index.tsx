@@ -275,7 +275,7 @@ const DashBoard = () => {
                 disabled={withdrawAmount === ""}
                 onClick={handleWithdraw}
               >
-                Withdraw {tokenName} from Deposit
+                Withdraw {tokenName} from Fugazi
               </TokenBalanceButton>
             </WithdrawInputWrapper>
             <WithdrawInputWrapper>
@@ -289,7 +289,7 @@ const DashBoard = () => {
                 disabled={depositAmount === ""}
                 onClick={handleDeposit}
               >
-                Deposit {tokenName} to Deposit
+                Deposit {tokenName} to Fugazi
               </TokenBalanceButton>
             </WithdrawInputWrapper>
           </TokenBalanceContainer>
