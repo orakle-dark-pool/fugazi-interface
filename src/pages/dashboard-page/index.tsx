@@ -329,8 +329,7 @@ const DashBoard = () => {
         <ContentWrapper>
           <ContentTitle>UnClaimed Orders</ContentTitle>
           <ContentSubTitle>
-            FuGazi is a service that allows you to swap tokens on the Helium
-            network.
+            Settle Batch Orders and Claim Orders
           </ContentSubTitle>
           {unclaimedOrders.map((order, index) => (
             <Order key={index}>

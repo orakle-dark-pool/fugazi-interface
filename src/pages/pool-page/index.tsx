@@ -1,15 +1,34 @@
 import { Header } from "../../components/header";
 import tw from "twin.macro";
 import { useState } from "react";
+import { usePoolActionFacet } from "../../contract/pool-action-facet";
+import Loading from "../../components/loading";
 
 const PoolPage = () => {
   const [tokenXAmount, setTokenXAmount] = useState("");
-  const [tokenXToken, setTokenXToken] = useState("ETH");
+  const [tokenXToken, setTokenXToken] = useState("FGZ");
   const [tokenYAmount, setTokenYAmount] = useState("");
-  const [tokenYToken, setTokenYToken] = useState("ETH");
+  const [tokenYToken, setTokenYToken] = useState("USD");
+
+  const {
+    isPending: isPendingGetPoolId,
+    submitSwapOrder,
+    settleSwapBatch,
+    addLiquidity,
+  } = usePoolActionFacet();
+
+  const handleAddLiquidity = async () => {
+    await addLiquidity(
+      Number(tokenXAmount),
+      tokenXToken,
+      Number(tokenYAmount),
+      tokenYToken
+    );
+  };
 
   return (
     <Wrapper>
+      {isPendingGetPoolId && <Loading />}
       <Header />
       <Container>
         <Title>Add Liquidity to Pool</Title>
@@ -32,9 +51,7 @@ const PoolPage = () => {
                     value={tokenXToken}
                     onChange={(e) => setTokenXToken(e.target.value)}
                   >
-                    <TokenSelectOption value="ETH">ETH</TokenSelectOption>
-                    <TokenSelectOption value="DAI">DAI</TokenSelectOption>
-                    <TokenSelectOption value="USDC">USDC</TokenSelectOption>
+                    <TokenSelectOption value="FGZ">FGZ</TokenSelectOption>
                   </TokenSelect>
                 </InputDiv>
               </InputContainer>
@@ -57,16 +74,16 @@ const PoolPage = () => {
                     value={tokenYToken}
                     onChange={(e) => setTokenYToken(e.target.value)}
                   >
-                    <TokenSelectOption value="ETH">ETH</TokenSelectOption>
-                    <TokenSelectOption value="DAI">DAI</TokenSelectOption>
-                    <TokenSelectOption value="USDC">USDC</TokenSelectOption>
+                    <TokenSelectOption value="USD">USD</TokenSelectOption>
                   </TokenSelect>
                 </InputDiv>
               </InputContainer>
             </InputBox>
           </InputWrapper>
 
-          <StyledButton>Add Liquidity</StyledButton>
+          <StyledButton onClick={handleAddLiquidity}>
+            Add Liquidity
+          </StyledButton>
         </Contents>
       </Container>
     </Wrapper>
