@@ -125,6 +125,7 @@ export const useViewer = () => {
           claimable: order[1] < order[2], // can claim
           time: date.toISOString(),
           settleable: settlable, //can settle
+          epoch: order[1],
         };
       });
 

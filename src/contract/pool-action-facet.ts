@@ -82,24 +82,24 @@ export const usePoolActionFacet = () => {
     }
   };
 
-  const settleSwapBatch = async () => {
+  const settleSwapBatch = async (poolId: string) => {
     const { signer } = await getProviderAndSigner();
-    let poolId;
+    //let poolId;
     const registryContract = new ethers.Contract(
       DIAMOND_ADDRESS,
       POOL_REGISTRY_FACET_ABI,
       signer
     );
     setIsPending(true);
-    try {
-      poolId = await registryContract.getPoolId(FUGAZI_ADDRESS, USD_ADDRESS);
-      console.log("poolId", poolId);
-    } catch (error) {
-      console.error("Error", error);
-      return "error";
-    } finally {
-      setIsPending(false);
-    }
+    // try {
+    //   poolId = await registryContract.getPoolId(FUGAZI_ADDRESS, USD_ADDRESS);
+    //   console.log("poolId", poolId);
+    // } catch (error) {
+    //   console.error("Error", error);
+    //   return "error";
+    // } finally {
+    //   setIsPending(false);
+    // }
 
     const actionContract = new ethers.Contract(
       DIAMOND_ADDRESS,
@@ -120,7 +120,7 @@ export const usePoolActionFacet = () => {
     }
   };
 
-  const claimOrder = async () => {
+  const claimOrder = async (poolId: string, epoch: string) => {
     const { signer } = await getProviderAndSigner();
     let unlaimedOrdersLength;
     let unclaimedOrder;
@@ -155,8 +155,10 @@ export const usePoolActionFacet = () => {
     setIsPending(true);
     try {
       const result = await actionContract.claim(
-        unclaimedOrder[0],
-        unclaimedOrder[1]
+        //unclaimedOrder[0],
+        //unclaimedOrder[1],
+        poolId,
+        epoch
       );
       console.log("claim order result", result);
       return result;
@@ -166,6 +168,15 @@ export const usePoolActionFacet = () => {
     } finally {
       setIsPending(false);
     }
+  };
+
+  const addLiquidity = async (
+    tokenAddress1: string,
+    tokenAddress2: string,
+    amount1: number,
+    amount2: number
+  ) => {
+    const { signer } = await getProviderAndSigner();
   };
 
   const removeLiquidity = async (

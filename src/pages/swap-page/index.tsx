@@ -28,10 +28,10 @@ const SwapPage = () => {
     console.log("result", result);
   };
 
-  const handleSettle = async () => {
-    const result = await settleSwapBatch();
-    console.log("result", result);
-  };
+  // const handleSettle = async () => {
+  //   const result = await settleSwapBatch();
+  //   console.log("result", result);
+  // };
 
   return (
     <Wrapper>
@@ -95,7 +95,7 @@ const SwapPage = () => {
         <SwapButton disabled={!inputAmount} onClick={handleSwap}>
           {!inputAmount ? "Type Amount First" : "Submit Order"}
         </SwapButton>
-        <SwapButton onClick={handleSettle}>Settle Batch FGZ - USD</SwapButton>
+        {/* <SwapButton onClick={handleSettle}>Settle Batch FGZ - USD</SwapButton> */}
       </Container>
     </Wrapper>
   );

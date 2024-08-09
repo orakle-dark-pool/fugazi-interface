@@ -110,13 +110,13 @@ const DashBoard = () => {
     setDepositBalance(Number(result));
   };
 
-  const handleClaimOrder = async () => {
-    const result = await claimOrder();
+  const handleClaimOrder = async (poolId: string, epoch: string) => {
+    const result = await claimOrder(poolId, epoch);
     console.log("Claim Order", result);
   };
 
-  const handleSettle = async () => {
-    const result = await settleSwapBatch();
+  const handleSettle = async (poolId: string) => {
+    const result = await settleSwapBatch(poolId);
     console.log("result", result);
   };
 
@@ -336,10 +336,27 @@ const DashBoard = () => {
             <Order key={index}>
               <OrderText>Pair : {truncateAddress(order.pair)}</OrderText>
               <OrderText>Time : {order.time}</OrderText>
-              <OrderButton disabled={order.settleable} onClick={handleSettle}>
-                {order.settleable ? "Settle" : "Can't settle yet"}
+              <OrderButton
+                able={order.settleable}
+                onClick={() => {
+                  if (order.settleable) {
+                    handleSettle(order.pair);
+                  }
+                }}
+              >
+                Settle
               </OrderButton>
-              <OrderButton>Claim</OrderButton>
+              <OrderButton
+                able={order.claimable}
+                onClick={() => {
+                  if (order.claimable) {
+                    console.log(order.pair, order.epoch);
+                    handleClaimOrder(order.pair, order.epoch);
+                  }
+                }}
+              >
+                {order.epoch} Claim
+              </OrderButton>
             </Order>
           ))}
         </ContentWrapper>
@@ -514,16 +531,16 @@ const Order = tw.div`
   flex items-center justify-between p-8 gap-8 bg-green-2
 `;
 interface orderButtonInterface {
-  disabled?: boolean;
+  able?: boolean;
 }
 
-const OrderButton = styled.button<orderButtonInterface>(({ disabled }) => [
+const OrderButton = styled.button<orderButtonInterface>(({ able }) => [
   tw`
   bg-green-2 hover:bg-green-3 text-white font-xl-m h-36 w-150
   px-16 py-2 rounded-md 
   border-solid border-2 border-green-3 cursor-pointer
 `,
-  disabled && tw`bg-green-1 hover:bg-green-1 cursor-not-allowed text-gray-400`,
+  !able && tw`bg-green-1 hover:bg-green-1 cursor-not-allowed text-gray-400`,
 ]);
 
 const OrderText = tw.div`
