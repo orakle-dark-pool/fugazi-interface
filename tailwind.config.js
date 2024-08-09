@@ -65,6 +65,7 @@ module.exports = {
         violet: "#9D50E5",
         blue: "#2E81FF",
         etc1: "#3384FF",
+        logo: "#00FF00",
       },
 
       fontFamily: {

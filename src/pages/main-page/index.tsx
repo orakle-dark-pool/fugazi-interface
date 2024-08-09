@@ -10,7 +10,12 @@ const MainPage = () => {
       <Header />
       <Body>
         <ServiceDescription>
-          <LogoImage src={logo} />
+          <LogoImage
+            src={logo}
+            onClick={() => {
+              window.location.href = "https://fugazi.xyz";
+            }}
+          />
           <TextBox>
             {/* <ServiceDescriptionTitle>FuGazi</ServiceDescriptionTitle> */}
             <ServiceDescriptionSubTitle>
@@ -60,5 +65,5 @@ const ServiceDescriptionTitle = tw.div`
 `;
 
 const ServiceDescriptionSubTitle = tw.div`
-  text-40 font-semibold
+  text-40 font-semibold text-logo
 `;

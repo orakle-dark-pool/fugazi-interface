@@ -17,6 +17,7 @@ import fgzLogo from "../../assets/logo.png";
 import eurLogo from "../../assets/eur.png";
 import styled from "@emotion/styled";
 import { useDistributor } from "../../contract/distributor";
+import { truncateAddress } from "../../utils/string";
 
 const dummyLiquidity = [
   {
@@ -331,13 +332,12 @@ const DashBoard = () => {
             FuGazi is a service that allows you to swap tokens on the Helium
             network.
           </ContentSubTitle>
-          {dummyOrders.map((order, index) => (
+          {unclaimedOrders.map((order, index) => (
             <Order key={index}>
-              <OrderText>Pair : {order.Pair}</OrderText>
-              <OrderText>Epoch : {order.Epoch}</OrderText>
-              <OrderText>Time : {order.Time}</OrderText>
-              <OrderButton disabled={canSettle} onClick={handleSettle}>
-                {canSettle ? "Settle" : "Can't settle yet"}
+              <OrderText>Pair : {truncateAddress(order.pair)}</OrderText>
+              <OrderText>Time : {order.time}</OrderText>
+              <OrderButton disabled={order.settleable} onClick={handleSettle}>
+                {order.settleable ? "Settle" : "Can't settle yet"}
               </OrderButton>
               <OrderButton>Claim</OrderButton>
             </Order>

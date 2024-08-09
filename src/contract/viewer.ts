@@ -121,10 +121,10 @@ export const useViewer = () => {
         console.log(`Order ${order[0]} is within 30 seconds:`, settlable);
         console.log(`Order ${order[0]} timestamp:`, date.toISOString());
         return {
-          0: order[0],
-          1: order[1] < order[2], // can claim
-          2: date.toISOString(),
-          3: settlable, //can settle
+          pair: order[0], // Pool Id
+          claimable: order[1] < order[2], // can claim
+          time: date.toISOString(),
+          settleable: settlable, //can settle
         };
       });
 
