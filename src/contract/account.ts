@@ -60,12 +60,8 @@ export const useAccountContract = () => {
   const deposit = async (typedAmount: number, tokenAddress: string) => {
     const { signer } = await getProviderAndSigner();
     const contract = new ethers.Contract(DIAMOND_ADDRESS, ACCOUNT_ABI, signer);
-    const tokenContract = new ethers.Contract(
-      FUGAZI_ADDRESS,
-      FUGAZI_ABI,
-      signer
-    );
-
+    const tokenContract = new ethers.Contract(tokenAddress, FUGAZI_ABI, signer);
+    console.log("Token Contract", tokenAddress);
     setIsPending(true);
     try {
       const encrypted: EncryptedUint32 = await client.encrypt(
