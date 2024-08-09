@@ -173,8 +173,7 @@ export const usePoolActionFacet = () => {
   const addLiquidity = async (
     typedAmount0: number,
     inputToken0: string,
-    typedAmount1: number,
-    inputToken1: string
+    typedAmount1: number
   ) => {
     const { signer } = await getProviderAndSigner();
     let poolId;

@@ -21,8 +21,8 @@ const PoolPage = () => {
     await addLiquidity(
       Number(tokenXAmount),
       tokenXToken,
-      Number(tokenYAmount),
-      tokenYToken
+      Number(tokenYAmount)
+      //tokenYToken
     );
   };
 
